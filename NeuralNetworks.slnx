@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="CommonLib/CommonLib.csproj" />
+  <Project Path="HillClimberDemo/HillClimberDemo.csproj" />
+</Solution>
