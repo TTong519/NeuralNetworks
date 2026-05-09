@@ -7,11 +7,14 @@ namespace HillClimberDemo
         {
             while(true)
             {
-                Random rand = new();
-                Console.WriteLine("Enter a initial string:");
-                string initial = Console.ReadLine();
+                Random rand = new();                
                 Console.WriteLine("Enter a target string:");
                 string target = Console.ReadLine();
+                string initial = "";
+                foreach(char c in target)
+                {
+                    initial += (char)rand.Next(32, 127);
+                }
                 var initialList = initial.ToDoubleList();
                 var targetList = target.ToDoubleList();
                 double mae = initialList.MAE(targetList);
@@ -20,12 +23,12 @@ namespace HillClimberDemo
                 {
                     List<double> lastState = new(initialList);
                     Console.Write("Current: ");
-                    initialList[rand.Next(initialList.Count)] += Math.Round(rand.NextDouble() * 2 - 1);
+                    initialList[rand.Next(initialList.Count)] += System.Math.Round(rand.NextDouble() * 2 - 1);
                     foreach(char c in initialList)
                     {
                         Console.Write(c);
                     }
-                    Console.WriteLine($" -> {target} | MAE: {mae}");
+                    Console.WriteLine($" -> {target} | MAE: {initialList.MAE(targetList)}");
                     if(initialList.MAE(targetList) < mae)
                     {
                         Console.WriteLine($"Improvement found! Last MAE: {mae} -> New MAE: {initialList.MAE(targetList)}");

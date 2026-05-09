@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="CommonLib/CommonLib.csproj" />
   <Project Path="HillClimberDemo/HillClimberDemo.csproj" />
+  <Project Path="LineOfBestFit/LineOfBestFit.csproj" Id="1985b222-ad70-4baa-984b-fb4f339a36a4" />
 </Solution>
