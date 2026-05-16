@@ -34,11 +34,11 @@ namespace CommonLib
         {
             return System.Math.Sqrt(System.Math.Pow(point2.X - point1.X, 2) + System.Math.Pow(point2.Y - point1.Y, 2));
         }
-        public static double Distance(this Point point, PointF Line)
+        public static double Distance(this Point point, System.Numerics.Vector2 Line)
         {
             PointF PerpLine = new();
             PerpLine.GenerateLine(-1 / Line.X, point);
-            PointF ClosestPoint = Line.GetIntersection(PerpLine);
+            PointF ClosestPoint = ((PointF)Line).GetIntersection(PerpLine);
             return Distance(point, ClosestPoint);
         }
         public static double Average(this List<double> list)
