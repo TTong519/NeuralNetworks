@@ -9,18 +9,22 @@ namespace CommonLib
         public double MutationAmount { get; private set; }
         public Random random { get; private set; }
 
-        public Perceptron(double[] initWeights, double initBias, double mutationAmount, Func<double, double, double> errorFunc)
+        public Perceptron(double[] initWeights, double initBias, double mutationAmount, Func<double, double, double> errorFunc, Random rand)
         {
             Weights = initWeights;
             Bias = initBias;
             MutationAmount = mutationAmount;
             ErrorFunc = errorFunc;
+            random = rand;
         }
-        public Perceptron(int numInputs)
+        public Perceptron(int numInputs, double mutationAmount, Func<double, double, double> errorFunc, Random rand)
         {
             Weights = new double[numInputs];
+            MutationAmount = mutationAmount;
+            ErrorFunc = errorFunc;
+            random = rand;
         }
-        public void Randomise(Random random, double min, double max)
+        public void Randomise(double min, double max)
         {
             for (int i = 0; i < Weights.Length; i++)
             {
@@ -49,9 +53,44 @@ namespace CommonLib
             }
             return toReturn;
         }
-        public double GetError(double[,] inputs, double[] target)
+        public double GetError(double[,] inputs, double[] targets)
         {
-
+            double[] result = new double[inputs.GetLength(0)];
+            result = Compute(inputs);
+            for(int i = 0; i < result.Length; i++)
+            {
+                result[i] = ErrorFunc(result[i], targets[i]);
+            }
+            return result.Average();
+        }
+        public void Mutate()
+        {
+            int index = random.Next(0, Weights.Length + 1);
+            if (index == Weights.Length)
+            {
+                Bias += (random.NextDouble() - 0.5) * 2 * MutationAmount;
+            }
+            else
+            {
+                Weights[index] += (random.NextDouble() - 0.5) * 2 * MutationAmount;
+            }
+        }
+        public double TrainWithHillClimbing(double[,] inputs, double[] targets, double currentError)
+        {
+            double[] lastWeights = Weights.ToArray();
+            double lastBias = Bias;
+            Mutate();
+            double newError = GetError(inputs, targets);
+            if (newError < currentError)
+            {
+                return newError;
+            }
+            else
+            {
+                Weights = lastWeights;
+                Bias = lastBias;
+                return currentError;
+            }
         }
     }
 }

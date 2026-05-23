@@ -1,22 +1,37 @@
-﻿using CommonLib;
-namespace PerceptronTest
+﻿using static CommonLib.Math;
+using CommonLib;
+namespace PerceptronAsAnd
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            double[] testWeights = { 0.75, -1.25 };
-            double[,] testInputs =
+            Random random = new();
+            Perceptron perceptron = new(2, 0.001, AE, random);
+            perceptron.Randomise(-1, 1);
+            double[,] inputs = new double[,]
             {
                 {0, 0},
-                {0.3, -0.7},
-                {1, 1},
-                {-1, -1},
-                {-0.5, 0.5}
+                {0, 1},
+                {1, 0},
+                {1, 1}
             };
-            Perceptron perceptron = new(testWeights, 0.5);
-            double[] testOut = perceptron.Compute(testInputs);
-            ;
+            double[] targets = new double[] 
+            { 
+                0, 
+                0, 
+                0, 
+                1 
+            };
+            for (int i = 0; i < 10000000; i++)
+            {
+                perceptron.TrainWithHillClimbing(inputs, targets, perceptron.GetError(inputs, targets));
+            }
+            var outs = perceptron.Compute(inputs);
+            foreach (var output in outs)
+            {
+                Console.WriteLine(System.Math.Round(output));
+            }
         }
     }
 }

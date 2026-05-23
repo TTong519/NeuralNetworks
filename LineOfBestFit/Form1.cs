@@ -1,4 +1,5 @@
 using CommonLib;
+using System.Net.Mail;
 using System.Numerics;
 using static System.Math;
 
@@ -9,11 +10,7 @@ namespace LineOfBestFit
         List<Point> Points = [];
         Bitmap? bmp;
         Graphics? gfx;
-        PointF Line;
-        PointF LastLine;
-        List<double> MAEHistory = [];
-        double RecentMAERange;
-        double MutationRate;
+        Perceptron Line;
 
         public Form1()
         {
@@ -31,47 +28,25 @@ namespace LineOfBestFit
 
         private void DrawButton_Click(object? sender, EventArgs e)
         {
-            while (RecentMAERange > 0.001)
+            double[,] inputs = new double[Points.Count, 1];
+            double[] targets = new double[Points.Count];
+            foreach (var (point, index) in Points.Select((value, i) => (value, i)))
             {
-                if (MAEHistory.Count >= 2)
-                {
-                    var temp = MAEHistory.Take(Min(MAEHistory.Count, 10)).ToList();
-                    RecentMAERange = Abs(temp.Max() - temp.Min());
-                }
-                var dists = new List<double>();
-                foreach (Point p in Points)
-                {
-                    dists.Add(p.Distance((Vector2)Line));
-                }
-                double mae = dists.Average();
-                if (mae > MAEHistory[0])
-                {
-                    Line = new((Vector2)LastLine);
-                }
-                else
-                {
-                    LastLine = new((Vector2)Line);
-                    MAEHistory.Insert(0, mae);
-                }
-                if(Random.Shared.Next(0, 2) == 1)
-                {
-                    Line.X += (float)((Random.Shared.NextDouble() - 0.5) * MutationRate);
-                }
-                else Line.Y += (float)((Random.Shared.NextDouble() - 0.5) * MutationRate);
+                inputs[index, 0] = point.X;
+                targets[index] = point.Y;
+            }
+            for (int i = 0; i < 1000000; i++)
+            {
+                Line.TrainWithHillClimbing(inputs, targets, Line.GetError(inputs, targets));
             }
         }
 
         private void Form1_Load(object? sender, EventArgs e)
         {
             Points = [];
-            Line = new();
+            Line = new(initWeights : [0.0], Display.Top/2, 0.25, (double a, double b) => System.Math.Abs(a - b), Random.Shared);
             bmp = new Bitmap(Display.Width, Display.Height);
             gfx = Graphics.FromImage(bmp);
-            Line.GenerateLine((float)0.01, new PointF(Display.Right, Display.Bottom/2));
-            LastLine = new((Vector2)Line);
-            MAEHistory = [double.MaxValue];
-            RecentMAERange = double.MaxValue;
-            MutationRate = 0.5;
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -79,9 +54,9 @@ namespace LineOfBestFit
             gfx.Clear(BackColor);
             foreach (Point p in Points)
             {
-                gfx.FillEllipse(Brushes.Black, p.X - 10, p.Y - 10, 20, 20);
+                gfx.FillEllipse(Brushes.Black, p.X - 5, p.Y - 5, 10, 10);
             }
-            gfx.DrawLine(Pens.Red, Display.Left, Line.X * Display.Left + Line.Y, Display.Right, Line.X * Display.Right + Line.Y);
+            gfx.DrawLine(Pens.Red, Display.Left, (int)Line.Compute([Display.Left]), Display.Right, (int)Line.Compute([Display.Right]));
             Display.Image = bmp;
         }
     }
