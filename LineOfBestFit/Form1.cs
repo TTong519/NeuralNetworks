@@ -53,7 +53,11 @@ namespace LineOfBestFit
                     LastLine = new((Vector2)Line);
                     MAEHistory.Insert(0, mae);
                 }
-                Line.X += (float)((Random.Shared.NextDouble() - 0.5) * MutationRate);
+                if(Random.Shared.Next(0, 2) == 1)
+                {
+                    Line.X += (float)((Random.Shared.NextDouble() - 0.5) * MutationRate);
+                }
+                else Line.Y += (float)((Random.Shared.NextDouble() - 0.5) * MutationRate);
             }
         }
 
@@ -63,11 +67,11 @@ namespace LineOfBestFit
             Line = new();
             bmp = new Bitmap(Display.Width, Display.Height);
             gfx = Graphics.FromImage(bmp);
-            Line.GenerateLine(new PointF(Display.Left, Display.Top), new PointF(Display.Right, Display.Bottom));
+            Line.GenerateLine((float)0.01, new PointF(Display.Right, Display.Bottom/2));
             LastLine = new((Vector2)Line);
             MAEHistory = [double.MaxValue];
             RecentMAERange = double.MaxValue;
-            MutationRate = 2;
+            MutationRate = 0.5;
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -75,7 +79,7 @@ namespace LineOfBestFit
             gfx.Clear(BackColor);
             foreach (Point p in Points)
             {
-                gfx.FillEllipse(Brushes.Black, p.X - 5, p.Y - 5, 10, 10);
+                gfx.FillEllipse(Brushes.Black, p.X - 10, p.Y - 10, 20, 20);
             }
             gfx.DrawLine(Pens.Red, Display.Left, Line.X * Display.Left + Line.Y, Display.Right, Line.X * Display.Right + Line.Y);
             Display.Image = bmp;

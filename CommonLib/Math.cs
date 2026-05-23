@@ -15,6 +15,24 @@ namespace CommonLib
             }
             return total / list.Count;
         }
+        public static double MSE(this List<double> list, List<double> target)
+        {
+            if (list.Count != target.Count) throw new ArgumentException("Both lists must have the same number of elements.");
+            double total = 0;
+            for(int i = 0; i < list.Count; i++)
+            {
+                total += System.Math.Pow(list[i] - target[i], 2);
+            }
+            return total / list.Count;
+        }
+        public static double AE(double val, double target)
+        {
+            return System.Math.Abs(val - target);
+        }
+        public static double SE(double val, double target)
+        {
+            return System.Math.Pow(val - target, 2);
+        }
         public static PointF GetIntersection(this PointF L1, PointF L2)
         {
             float X = (L2.Y - L1.Y) / (L1.X - L2.X);
@@ -37,7 +55,7 @@ namespace CommonLib
         public static double Distance(this Point point, System.Numerics.Vector2 Line)
         {
             PointF PerpLine = new();
-            PerpLine.GenerateLine(-1 / Line.X, point);
+            PerpLine.GenerateLine((float)System.Math.ReciprocalEstimate(-1*Line.X), point);
             PointF ClosestPoint = ((PointF)Line).GetIntersection(PerpLine);
             return Distance(point, ClosestPoint);
         }

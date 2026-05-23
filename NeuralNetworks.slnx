@@ -2,4 +2,5 @@
   <Project Path="CommonLib/CommonLib.csproj" />
   <Project Path="HillClimberDemo/HillClimberDemo.csproj" />
   <Project Path="LineOfBestFit/LineOfBestFit.csproj" Id="1985b222-ad70-4baa-984b-fb4f339a36a4" />
+  <Project Path="PerceptronTest/PerceptronTest.csproj" Id="7b7b9bc0-c03a-490a-8c65-d68224418abc" />
 </Solution>
