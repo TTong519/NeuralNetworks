@@ -4,34 +4,6 @@ namespace CommonLib
 {
     public static class Math
     {
-        public static double MAE(this List<double> list, List<double> target)
-        {
-            if (list.Count != target.Count) throw new ArgumentException("Both lists must have the same number of elements.");
-            double total = 0;
-            for (int i = 0; i < list.Count; i++)
-            {
-                total += AE(list[i], target[i]);
-            }
-            return total / list.Count;
-        }
-        public static double MSE(this List<double> list, List<double> target)
-        {
-            if (list.Count != target.Count) throw new ArgumentException("Both lists must have the same number of elements.");
-            double total = 0;
-            for (int i = 0; i < list.Count; i++)
-            {
-                total += SE(list[i], target[i]);
-            }
-            return total / list.Count;
-        }
-        public static double AE(double val, double target)
-        {
-            return System.Math.Abs(val - target);
-        }
-        public static double SE(double val, double target)
-        {
-            return System.Math.Pow(val - target, 2);
-        }
         public static PointF GetIntersection(this PointF L1, PointF L2)
         {
             float X = (L2.Y - L1.Y) / (L1.X - L2.X);
@@ -87,6 +59,29 @@ namespace CommonLib
             for (int i = 0; i < vals.Count; i++)
             {
                 vals[i] = ((vals[i] - min) / (max - min)) * (dmax - dmin) + dmin;
+            }
+        }
+        public static void Normalize(this ref PointF point, PointF min, PointF max, PointF dmin, PointF dmax)
+        {
+            point.X = ((point.X - min.X) / (max.X - min.X)) * (dmax.X - dmin.X) + dmin.X;
+            point.Y = ((point.Y - min.Y) / (max.Y - min.Y)) * (dmax.Y - dmin.Y) + dmin.Y;
+        }
+        public static void Normalize(this List<PointF> points, PointF dmin, PointF dmax)
+        {
+            PointF min = new(points.Min(p => p.X), points.Min(p => p.Y));
+            PointF max = new(points.Max(p => p.X), points.Max(p => p.Y));
+            for (int i = 0; i < points.Count; i++)
+            {
+                points[i] = new(((points[i].X - min.X) / (max.X - min.X)) * (dmax.X - dmin.X) + dmin.X, ((points[i].Y - min.Y) / (max.Y - min.Y)) * (dmax.Y - dmin.Y) + dmin.Y);
+            }
+        }
+        public static void Normalize(this PointF[] points, PointF dmin, PointF dmax)
+        {
+            PointF min = new(points.Min(p => p.X), points.Min(p => p.Y));
+            PointF max = new(points.Max(p => p.X), points.Max(p => p.Y));
+            for (int i = 0; i < points.Length; i++)
+            {
+                points[i] = new(((points[i].X - min.X) / (max.X - min.X)) * (dmax.X - dmin.X) + dmin.X, ((points[i].Y - min.Y) / (max.Y - min.Y)) * (dmax.Y - dmin.Y) + dmin.Y);
             }
         }
     }

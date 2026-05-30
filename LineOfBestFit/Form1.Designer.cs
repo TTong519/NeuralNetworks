@@ -38,9 +38,9 @@
             // Display
             // 
             Display.BorderStyle = BorderStyle.Fixed3D;
-            Display.Location = new Point(6, 2);
+            Display.Location = new Point(0, 0);
             Display.Name = "Display";
-            Display.Size = new Size(782, 415);
+            Display.Size = new Size(782, 450);
             Display.TabIndex = 0;
             Display.TabStop = false;
             Display.Click += Display_Click;
@@ -48,7 +48,7 @@
             // DrawButton
             // 
             DrawButton.FlatStyle = FlatStyle.Popup;
-            DrawButton.Location = new Point(362, 423);
+            DrawButton.Location = new Point(837, 230);
             DrawButton.Name = "DrawButton";
             DrawButton.Size = new Size(75, 23);
             DrawButton.TabIndex = 1;
@@ -66,7 +66,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1009, 450);
             Controls.Add(DrawButton);
             Controls.Add(Display);
             Name = "Form1";

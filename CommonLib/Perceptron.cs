@@ -5,23 +5,26 @@ namespace CommonLib
     {
         public double[] Weights { get; private set; }
         public double Bias { get; private set; }
-        public Func<double, double, double> ErrorFunc { get; private set; }
+        public ErrorFunc Error { get; private set; }
         public double MutationAmount { get; private set; }
         public Random random { get; private set; }
+        public ActivationFunc Activation { get; private set; }
 
-        public Perceptron(double[] initWeights, double initBias, double mutationAmount, Func<double, double, double> errorFunc, Random rand)
+        public Perceptron(double[] initWeights, double initBias, double mutationAmount, ErrorFunc error, ActivationFunc activation, Random rand)
         {
             Weights = initWeights;
             Bias = initBias;
             MutationAmount = mutationAmount;
-            ErrorFunc = errorFunc;
+            Error = error;
+            Activation = activation;
             random = rand;
         }
-        public Perceptron(int numInputs, double mutationAmount, Func<double, double, double> errorFunc, Random rand)
+        public Perceptron(int numInputs, double mutationAmount, ErrorFunc error, ActivationFunc activation, Random rand)
         {
             Weights = new double[numInputs];
             MutationAmount = mutationAmount;
-            ErrorFunc = errorFunc;
+            Error = error;
+            Activation = activation;
             random = rand;
         }
         public void Randomise(double min, double max)
@@ -40,7 +43,7 @@ namespace CommonLib
             {
                 sum += Weights[i] * inputs[i];
             }
-            return sum + Bias;
+            return Activation.Compute(sum + Bias);
         }
         public double[] Compute(double[,] inputs)
         {
@@ -59,7 +62,7 @@ namespace CommonLib
             result = Compute(inputs);
             for(int i = 0; i < result.Length; i++)
             {
-                result[i] = ErrorFunc(result[i], targets[i]);
+                result[i] = Error.Compute(result[i], targets[i]);
             }
             return result.Average();
         }
