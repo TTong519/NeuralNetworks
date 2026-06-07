@@ -28,8 +28,8 @@ namespace CommonLib
             input => 1 / (1 + System.Math.Exp(-input)),
             input => input * (1 - input)
         );
-        public static ActivationFunc And = new(
-            input => input > 1.5 ? 1 : 0,
+        public static ActivationFunc BinStep = new(
+            input => input > 0 ? 1 : 0,
             input => 0
         );
         public static ActivationFunc TanH = new(
@@ -39,6 +39,14 @@ namespace CommonLib
         public static ActivationFunc ReLU = new(
             input => System.Math.Max(0, input),
             input => input > 0 ? 1 : 0
+        );
+        public static ActivationFunc Identity = new(
+            input => input,
+            input => 1
+        );
+        public static ActivationFunc Round = new(
+            input => System.Math.Round(input),
+            input => 0
         );
     }
 }

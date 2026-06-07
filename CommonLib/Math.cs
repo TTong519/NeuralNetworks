@@ -66,19 +66,15 @@ namespace CommonLib
             point.X = ((point.X - min.X) / (max.X - min.X)) * (dmax.X - dmin.X) + dmin.X;
             point.Y = ((point.Y - min.Y) / (max.Y - min.Y)) * (dmax.Y - dmin.Y) + dmin.Y;
         }
-        public static void Normalize(this List<PointF> points, PointF dmin, PointF dmax)
+        public static void Normalize(this List<PointF> points, PointF min, PointF max, PointF dmin, PointF dmax)
         {
-            PointF min = new(points.Min(p => p.X), points.Min(p => p.Y));
-            PointF max = new(points.Max(p => p.X), points.Max(p => p.Y));
             for (int i = 0; i < points.Count; i++)
             {
                 points[i] = new(((points[i].X - min.X) / (max.X - min.X)) * (dmax.X - dmin.X) + dmin.X, ((points[i].Y - min.Y) / (max.Y - min.Y)) * (dmax.Y - dmin.Y) + dmin.Y);
             }
         }
-        public static void Normalize(this PointF[] points, PointF dmin, PointF dmax)
+        public static void Normalize(this PointF[] points, PointF min, PointF max, PointF dmin, PointF dmax)
         {
-            PointF min = new(points.Min(p => p.X), points.Min(p => p.Y));
-            PointF max = new(points.Max(p => p.X), points.Max(p => p.Y));
             for (int i = 0; i < points.Length; i++)
             {
                 points[i] = new(((points[i].X - min.X) / (max.X - min.X)) * (dmax.X - dmin.X) + dmin.X, ((points[i].Y - min.Y) / (max.Y - min.Y)) * (dmax.Y - dmin.Y) + dmin.Y);

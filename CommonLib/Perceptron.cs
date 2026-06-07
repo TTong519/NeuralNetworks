@@ -9,8 +9,9 @@ namespace CommonLib
         public double MutationAmount { get; private set; }
         public Random random { get; private set; }
         public ActivationFunc Activation { get; private set; }
+        public double LearningRate;
 
-        public Perceptron(double[] initWeights, double initBias, double mutationAmount, ErrorFunc error, ActivationFunc activation, Random rand)
+        public Perceptron(double[] initWeights, double initBias, double mutationAmount, ErrorFunc error, ActivationFunc activation, Random rand, double learningRate = 1)
         {
             Weights = initWeights;
             Bias = initBias;
@@ -18,14 +19,16 @@ namespace CommonLib
             Error = error;
             Activation = activation;
             random = rand;
+            LearningRate = learningRate;
         }
-        public Perceptron(int numInputs, double mutationAmount, ErrorFunc error, ActivationFunc activation, Random rand)
+        public Perceptron(int numInputs, double mutationAmount, ErrorFunc error, ActivationFunc activation, Random rand, double learningRate = 1)
         {
             Weights = new double[numInputs];
             MutationAmount = mutationAmount;
             Error = error;
             Activation = activation;
             random = rand;
+            LearningRate = learningRate;
         }
         public void Randomise(double min, double max)
         {
@@ -35,7 +38,7 @@ namespace CommonLib
             }
             Bias = ((max - min) * random.NextDouble()) + min;
         }
-        public double Compute(double[] inputs)
+        public double Compute(double[] inputs, bool doActivation = true)
         {
             double sum = 0;
             if (inputs.Length != Weights.Length) throw new ArgumentException("bad inputs");
@@ -43,16 +46,18 @@ namespace CommonLib
             {
                 sum += Weights[i] * inputs[i];
             }
-            return Activation.Compute(sum + Bias);
+            if (doActivation) return Activation.Compute(sum + Bias);
+            else return sum + Bias;
         }
-        public double[] Compute(double[,] inputs)
+
+        public double[] Compute(double[,] inputs, bool doActivation = true)
         {
             double[] toReturn = new double[inputs.GetLength(0)];
             if (Weights.Length != inputs.GetLength(1)) throw new ArgumentException("bad inputs");
             for(int i = 0; i < inputs.GetLength(0); i++)
             {
                 Span<double> rowSpan = CreateSpan(ref inputs[i, 0], inputs.GetLength(1));
-                toReturn[i] = Compute(rowSpan.ToArray());
+                toReturn[i] = Compute(rowSpan.ToArray(), doActivation);
             }
             return toReturn;
         }
@@ -94,6 +99,17 @@ namespace CommonLib
                 Bias = lastBias;
                 return currentError;
             }
+        }
+        public double TrainWithGradientDecent(double[] inputs, double desired)
+        {
+            double output = Compute(inputs);
+            double inactiveOutput = Compute(inputs, false);
+            double pd = LearningRate * Error.ComputeDerivative(output, desired) * Activation.ComputeDerivative(inactiveOutput);
+            for (int i = 0; i < Weights.Length; i++)
+            {
+                Weights[i] -= pd * inputs[i];
+            }
+            Bias -= pd;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace PerceptronAsAnd
         static void Main(string[] args)
         {
             Random random = new();
-            Perceptron perceptron = new(2, 0.001, AE, random);
+            Perceptron perceptron = new(2, 0.01, ErrorFuncs.MAE, ActivationFuncs.Identity, random);
             perceptron.Randomise(-1, 1);
             double[,] inputs = new double[,]
             {

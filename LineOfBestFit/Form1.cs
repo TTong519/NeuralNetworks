@@ -29,7 +29,7 @@ namespace LineOfBestFit
         private void DrawButton_Click(object? sender, EventArgs e)
         {
             PointF[] points = Points.Select(p => new PointF(p.X, p.Y)).ToArray();
-            points.Normalize(new(0, 0), new(1, 1));
+            points.Normalize(new(0, 0), new(Display.Width, Display.Height), new(0, 0), new(5, 5));
             double[,] inputs = new double[Points.Count, 1];
             double[] targets = new double[Points.Count];
             foreach (var (point, index) in points.Select((value, i) => (value, i)))
@@ -46,7 +46,7 @@ namespace LineOfBestFit
         private void Form1_Load(object? sender, EventArgs e)
         {
             Points = [];
-            Line = new(initWeights : [0.0], 0.5, 0.1, (double a, double b) => System.Math.Abs(a - b), Random.Shared);
+            Line = new(initWeights : [0.0], 2.5, 0.5, ErrorFuncs.MSE, ActivationFuncs.Identity, Random.Shared);
             bmp = new Bitmap(Display.Width, Display.Height);
             gfx = Graphics.FromImage(bmp);
         }
@@ -59,9 +59,9 @@ namespace LineOfBestFit
                 gfx.FillEllipse(Brushes.Black, p.X - 5, p.Y - 5, 10, 10);
             }
             PointF Left = new(0, (float)Line.Compute([0.0]));
-            PointF Right = new(1, (float)Line.Compute([1.0]));
-            Left.Normalize(new(0, 0), new(1, 1), new(0,0), new(Display.Width, Display.Height));
-            Right.Normalize(new(0, 0), new(1, 1), new(0,0), new(Display.Width, Display.Height));
+            PointF Right = new(5, (float)Line.Compute([5.0]));
+            Left.Normalize(new(0, 0), new(5, 5), new(0, 0), new(Display.Width, Display.Height));
+            Right.Normalize(new(0, 0), new(5, 5), new(0, 0), new(Display.Width, Display.Height));
             gfx.DrawLine(Pens.Red, Left, Right);
             Display.Image = bmp;
         }
