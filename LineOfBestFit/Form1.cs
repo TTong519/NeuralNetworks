@@ -20,7 +20,7 @@ namespace LineOfBestFit
         private void Display_Click(object? sender, EventArgs e)
         {
             MouseEventArgs mouseE = (MouseEventArgs)e;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 1; i++)
             {
                 Points.Add(new(mouseE.X, mouseE.Y));
             }
@@ -37,16 +37,16 @@ namespace LineOfBestFit
                 inputs[index, 0] = point.X;
                 targets[index] = point.Y;
             }
-            for (int i = 0; i < 1000000; i++)
+            for (int i = 0; i < 1000; i++)
             {
-                Line.TrainWithHillClimbing(inputs, targets, Line.GetError(inputs, targets));
+                Line.TrainWithGradientDecent(inputs, targets);
             }
         }
 
         private void Form1_Load(object? sender, EventArgs e)
         {
             Points = [];
-            Line = new(initWeights : [0.0], 2.5, 0.5, ErrorFuncs.MSE, ActivationFuncs.Identity, Random.Shared);
+            Line = new(initWeights : [0.0], 2.5, 0.5, ErrorFuncs.MSE, ActivationFuncs.Identity, Random.Shared, 0.05);
             bmp = new Bitmap(Display.Width, Display.Height);
             gfx = Graphics.FromImage(bmp);
         }

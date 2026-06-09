@@ -80,5 +80,9 @@ namespace CommonLib
                 points[i] = new(((points[i].X - min.X) / (max.X - min.X)) * (dmax.X - dmin.X) + dmin.X, ((points[i].Y - min.Y) / (max.Y - min.Y)) * (dmax.Y - dmin.Y) + dmin.Y);
             }
         }
+        public static double Identity(double val)
+        {
+            return val;
+        }
     }
 }

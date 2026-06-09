@@ -110,6 +110,16 @@ namespace CommonLib
                 Weights[i] -= pd * inputs[i];
             }
             Bias -= pd;
+            return Error.Compute(Compute(inputs), desired);
+        }
+        public double TrainWithGradientDecent(double[,] inputs, double[] desired)
+        {
+            for (int i = 0; i < inputs.GetLength(0); i++)
+            {
+                Span<double> rowSpan = CreateSpan(ref inputs[i, 0], inputs.GetLength(1));
+                TrainWithGradientDecent(rowSpan.ToArray(), desired[i]);
+            }
+            return GetError(inputs, desired);
         }
     }
 }
