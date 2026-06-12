@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="CommonLib/CommonLib.csproj" />
+  <Project Path="FlappyBirdGeneticLearning/FlappyBirdGeneticLearning.csproj" Id="da80537d-e38e-449c-b709-b2d7a4ca888a" />
   <Project Path="LineOfBestFit/LineOfBestFit.csproj" Id="1985b222-ad70-4baa-984b-fb4f339a36a4" />
   <Project Path="PerceptronTest/PerceptronAsAnd.csproj" Id="7b7b9bc0-c03a-490a-8c65-d68224418abc" />
 </Solution>
