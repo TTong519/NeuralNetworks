@@ -52,9 +52,9 @@ namespace CommonLib
                 }
             }
             int numMutations = (int)(mutationRate * numWeights);
-            for(int i = 0; numMutations > 0; i++)
+            for(int i = numMutations; i > 0; i--)
             {
-                int layerIndex = Random.Shared.Next(Layers.Length);
+                int layerIndex = Random.Shared.Next(1, Layers.Length);
                 Layer layer = Layers[layerIndex];
                 int neuronIndex = Random.Shared.Next(layer.Neurons.Length);
                 Neuron neuron = layer.Neurons[neuronIndex];

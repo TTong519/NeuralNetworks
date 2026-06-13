@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommonLib;
 
 namespace FlappyBirdGeneticLearning
 {
@@ -14,28 +15,35 @@ namespace FlappyBirdGeneticLearning
         public Rectangle Bounds;
         public double yVelocity;
         public double Gravity;
-        private bool lastState = false;
+        public NeuralNetwork NeuralNetwork;
+        public bool isDead = false;
+        public int Score = 0;
         public Bird(Rectangle bounds, double gravity)
         {
             Bounds = bounds;
             yVelocity = 0;
             Gravity = gravity;
         }
-        public bool Update(List<Pipe> pipes, GraphicsDevice graphicsDevice)
+        public bool Update(List<Pipe> pipes, GraphicsDevice graphicsDevice, bool isJump)
         {
-            yVelocity += Gravity;
-            bool currentState = Keyboard.GetState().IsKeyDown(Keys.Space);
-            if (currentState && !lastState)
+            if(isDead)
             {
-                yVelocity -= 12;
+                return false;
             }
-            lastState = currentState;
+            yVelocity += Gravity;
+            if (isJump)
+            {
+                yVelocity = -10;
+            }
+            Score++;
             Bounds = new Rectangle(Bounds.X, (int)(Bounds.Y + yVelocity), Bounds.Width, Bounds.Height);
             if(Bounds.Y < 0 || Bounds.Y + Bounds.Height > graphicsDevice.Viewport.Height)
             {
+                isDead = true;
                 return true;
             }
-            return CheckCollisions(pipes, graphicsDevice);
+            isDead = CheckCollisions(pipes, graphicsDevice);
+            return isDead;
         }
         private bool CheckCollisions(List<Pipe> pipes, GraphicsDevice graphicsDevice)
         {
@@ -51,6 +59,10 @@ namespace FlappyBirdGeneticLearning
         }
         public void Draw(SpriteBatch spriteBatch, Texture2D birdTexture)
         {
+            if (isDead)
+            {
+                return;
+            }   
             spriteBatch.Draw(birdTexture, Bounds, Color.White);
         }
     }

@@ -32,7 +32,7 @@ namespace CommonLib
         {
             for(int i = 0; i < swapCount; i++)
             {
-                int layerIndex = Random.Shared.Next(recipient.Layers.Length);
+                int layerIndex = Random.Shared.Next(1, recipient.Layers.Length);
                 int neuronIndex = Random.Shared.Next(recipient.Layers[layerIndex].Neurons.Length);
                 int dendriteIndex = Random.Shared.Next(recipient.Layers[layerIndex].Neurons[neuronIndex].Dendrites.Length);
                 recipient.Layers[layerIndex].Neurons[neuronIndex].Dendrites[dendriteIndex].Weight = donor.Layers[layerIndex].Neurons[neuronIndex].Dendrites[dendriteIndex].Weight;
@@ -43,24 +43,44 @@ namespace CommonLib
         {
             for (int i = 0; i < generations; i++)
             {
-                Dictionary<double, NeuralNetwork> dict = new Dictionary<double, NeuralNetwork>();
+                Dictionary<double, List<NeuralNetwork>> dict = new Dictionary<double, List<NeuralNetwork>>();
                 List<double> fitnesses = new List<double>();
                 foreach (NeuralNetwork n in population)
                 {
                     double fitness = fitnessFunc(n);
-                    dict.Add(fitness, n);
+                    if (!dict.ContainsKey(fitness))
+                    {
+                        dict[fitness] = new List<NeuralNetwork>();
+                    }
+                    dict[fitness].Add(n);
                     fitnesses.Add(fitness);
                 }
                 fitnesses.Sort();
                 List<NeuralNetwork> bestNets = new List<NeuralNetwork>();
                 for (int j = populationSize - 1; j > populationSize - (populationSize * 0.1) - 1; j--)
                 {
-                    bestNets.Add(dict[fitnesses[j]]);
+                    foreach (NeuralNetwork net in dict[fitnesses[j]])
+                    {
+                        bestNets.Add(net);
+                        j--;
+                        if (j <= populationSize - (populationSize * 0.1) - 1)
+                        {
+                            break;
+                        }
+                    }
                 }
                 List<NeuralNetwork> survivorNets = new List<NeuralNetwork>();
                 for (int j = populationSize - (int)(populationSize * 0.1) - 1; j > populationSize - (populationSize * 0.5) - 1; j--)
                 {
-                    survivorNets.Add(dict[fitnesses[j]]);
+                    foreach (NeuralNetwork net in dict[fitnesses[j]])
+                    {
+                        survivorNets.Add(net);
+                        j--;
+                        if (j <= populationSize - (populationSize * 0.5) - 1)
+                        {
+                            break;
+                        }
+                    }
                 }
                 foreach (NeuralNetwork n in survivorNets)
                 {

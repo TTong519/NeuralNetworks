@@ -23,6 +23,10 @@ namespace CommonLib
         {
             return System.Math.Sqrt(System.Math.Pow(point2.X - point1.X, 2) + System.Math.Pow(point2.Y - point1.Y, 2));
         }
+        public static double Distance(this Point point1, Point point2)
+        {
+            return System.Math.Sqrt(System.Math.Pow(point2.X - point1.X, 2) + System.Math.Pow(point2.Y - point1.Y, 2));
+        }
         public static double Distance(this Point point, System.Numerics.Vector2 Line)
         {
             PointF PerpLine = new();

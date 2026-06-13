@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 
@@ -13,7 +14,6 @@ namespace FlappyBirdGeneticLearning
         Texture2D birdTexture;
         Texture2D pipeTexture;
         List<Pipe> Pipes;
-        Bird bird;
         int counter = 0;
         public FlappyBirdGenetic()
         {
@@ -28,7 +28,7 @@ namespace FlappyBirdGeneticLearning
         {
             // TODO: Add your initialization logic here
             Pipes = new List<Pipe>();
-            bird = new Bird(new Rectangle(200, 100, 60, 50), 0.5);
+            BirdLearner.Init();
             base.Initialize();
         }
 
@@ -46,18 +46,24 @@ namespace FlappyBirdGeneticLearning
                 Exit();
 
             // TODO: Add your update logic here
-            counter++;
+            
             foreach (Pipe pipe in Pipes)
             {
                 pipe.Update(4);
             }
-            if(counter % 120 == 0)
+            if(Pipes.Count > 0 && Pipes[0].Location.X < -112)
             {
-                Pipes.Add(new Pipe(new Vector2(1300, 300 + (float)(Random.Shared.NextDouble() * 400) - 200), 112, 100));
+                Pipes.RemoveAt(0);
             }
-            if(bird.Update(Pipes, GraphicsDevice))
+            if (counter % 120 == 0)
             {
-                Exit();
+                Pipes.Add(new Pipe(new Vector2(1312, 300 + (float)(Random.Shared.NextDouble() * 400) - 200), 112, 100));
+            }
+            counter++;
+            if (BirdLearner.Update(Pipes, GraphicsDevice))
+            {
+                Pipes.Clear();
+                counter = 0;
             }
             base.Update(gameTime);
         }
@@ -68,10 +74,14 @@ namespace FlappyBirdGeneticLearning
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            bird.Draw(spriteBatch, birdTexture);
+            BirdLearner.Draw(spriteBatch, birdTexture);
             foreach (Pipe pipe in Pipes)
             {
                 pipe.Draw(spriteBatch, pipeTexture);
+            }
+            if (Pipes.Count > 0)
+            {
+                spriteBatch.DrawPoint(new Vector2(Pipes[0].Location.X + 50, Pipes[0].Location.Y), Color.Red, 3);
             }
             spriteBatch.End();
             base.Draw(gameTime);
