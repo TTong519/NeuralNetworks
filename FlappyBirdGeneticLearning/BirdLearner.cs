@@ -13,13 +13,13 @@ namespace FlappyBirdGeneticLearning
 {
     public static class BirdLearner
     {
-        private static GeneticLearner learner;
+        private static GeneticLearnerNN learner;
         private static Dictionary<NeuralNetwork, double> fitnessDict;
         private static List<Bird> birds;
         private static int deathCount = 0;
         public static void Init()
         {
-            learner = new GeneticLearner(100, 2, (NeuralNetwork nn) => fitnessDict[nn], ErrorFuncs.MSE, ActivationFuncs.Identity, [2, 4, 1]);
+            learner = new GeneticLearnerNN(100, 2, (NeuralNetwork nn) => fitnessDict[nn], ErrorFuncs.MSE, ActivationFuncs.Identity, [2, 6, 6, 1]);
             fitnessDict = new Dictionary<NeuralNetwork, double>();
             birds = new List<Bird>();
             for(int i = 0; i < 100; i++)

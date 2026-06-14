@@ -33,5 +33,19 @@ namespace CommonLib
             }
             return Outputs;
         }
+        public void ApplyUpdate()
+        {
+            foreach (Neuron n in Neurons)
+            {
+                n.ApplyUpdate();
+            }
+        }
+        public void Backprop(double learningRate)
+        {
+            foreach(Neuron n in Neurons)
+            {
+                n.Backprop(learningRate);
+            }
+        }
     }
 }

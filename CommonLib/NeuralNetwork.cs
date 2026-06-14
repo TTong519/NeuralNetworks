@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace CommonLib
@@ -68,6 +69,43 @@ namespace CommonLib
                     neuron.Dendrites[dendriteIndex].Weight += (Random.Shared.NextDouble() * 2 - 1) * mutationAmount;
                 }
             }
+        }
+        public void ApplyUpdate()
+        {
+            foreach(Layer l in Layers)
+            {
+                l.ApplyUpdate();
+            }
+        }
+        public void Backprop(double learningRate, double[] desiredOutputs)
+        {
+            for(int i = 0; i < Layers.Last().Neurons.Length; i++)
+            {
+                Layers.Last().Neurons[i].Delta = Error.ComputeDerivative(Layers.Last().Neurons[i].Output, desiredOutputs[i]);
+            }
+            for(int i = Layers.Length - 1; i > 0; i--)
+            {
+                Layers[i].Backprop(learningRate);
+            }
+        }
+        public double[] Train(double[,] inputs, double[,] desiredOutputs, double learningRate)
+        {
+            List<double> errors = new List<double>();
+            for( int i = 0; i < inputs.GetLength(0); i++)
+            {
+                Span<double> inputsSpan = MemoryMarshal.CreateSpan(ref inputs[i, 0], inputs.GetLength(1));
+                List<double> error = new List<double>();
+                double[] outs = Compute(inputsSpan.ToArray());
+                for (int j = 0; j < outs.Length; j++)
+                {
+                    error.Add(Error.Compute(outs[j], desiredOutputs[i, j]));
+                }
+                errors.Add(error.Average());
+                Span<double> desiredSpan = MemoryMarshal.CreateSpan(ref desiredOutputs[i, 0], inputs.GetLength(1));
+                Backprop(learningRate, desiredSpan.ToArray());
+                ApplyUpdate();
+            }
+            return errors.ToArray();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CommonLib
 {
-    public class GeneticLearner
+    public class GeneticLearnerNN
     {
         public int populationSize { get; private set; }
         public int swapCount { get; private set; }
@@ -13,7 +13,7 @@ namespace CommonLib
         public ActivationFunc Activation { get; private set; }
         public Func<NeuralNetwork, double> fitnessFunc { get; private set; }
         public List<NeuralNetwork> population { get; private set; }
-        public GeneticLearner(int populationSize, int swapCount, Func<NeuralNetwork, double> fitnessFunc, ErrorFunc errorFunc, ActivationFunc activationFunc, params int[] layerSizes)
+        public GeneticLearnerNN(int populationSize, int swapCount, Func<NeuralNetwork, double> fitnessFunc, ErrorFunc errorFunc, ActivationFunc activationFunc, params int[] layerSizes)
         {
             this.populationSize = populationSize;
             this.swapCount = swapCount;

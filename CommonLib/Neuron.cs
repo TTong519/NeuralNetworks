@@ -6,10 +6,12 @@ namespace CommonLib
 {
     public class Neuron
     {
+        public double Delta { get; set; }
         public double Bias { get; internal set; }
         public Dendrite[] Dendrites { get; private set; }
         public double Output { get; set; }
         public double Input { get; private set; }
+        public double BiasUpdate {  get; set; }
         public ActivationFunc Activation { get; set; }
         public Neuron(ActivationFunc activation, Neuron[] previousNerons)
         {
@@ -38,6 +40,25 @@ namespace CommonLib
             Input += Bias;
             Output = Activation.Compute(Input);
             return Output;
+        }
+        public void ApplyUpdate()
+        {
+            foreach (var d in Dendrites)
+            {
+                d.ApplyUpdate();
+            }
+            Bias += BiasUpdate;
+            BiasUpdate = 0;
+        }
+        public void Backprop(double learningRate)
+        {
+            foreach(var d in Dendrites)
+            {
+                d.Previous.Delta = Delta * Activation.ComputeDerivative(d.Previous.Input) * d.Weight;
+                d.Weight -= learningRate * Delta * Activation.ComputeDerivative(d.Previous.Input) * d.Previous.Output;
+                Bias -= learningRate * Delta * Activation.ComputeDerivative(d.Previous.Input);
+                Delta = 0;
+            }
         }
     }
 }
