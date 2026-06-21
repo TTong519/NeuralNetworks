@@ -19,6 +19,7 @@ namespace CommonLib
         {
             for (int i = 0; i < Neurons.Length; i++)
             {
+                Neurons[i].Input = Inputs[i];
                 Neurons[i].Output = Inputs[i];
                 Outputs[i] = Neurons[i].Output;
             }

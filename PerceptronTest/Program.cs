@@ -9,12 +9,12 @@ namespace PerceptronAsAnd
             Random random = new();
             Perceptron perceptron = new(2, 0.01, ErrorFuncs.MAE, ActivationFuncs.Identity, random);
             perceptron.Randomise(-1, 1);
-            double[,] inputs = new double[,]
+            double[][] inputs = new double[][]
             {
-                {0, 0},
-                {0, 1},
-                {1, 0},
-                {1, 1}
+                new[] { 0.0, 0.0 },
+                new[] { 0.0, 1.0 },
+                new[] { 1.0, 0.0 },
+                new[] { 1.0, 1.0 }
             };
             double[] targets = new double[] 
             { 

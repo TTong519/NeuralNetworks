@@ -1,5 +1,4 @@
-﻿using static System.Runtime.InteropServices.MemoryMarshal;
-namespace CommonLib
+﻿namespace CommonLib
 {
     public class Perceptron
     {
@@ -50,22 +49,21 @@ namespace CommonLib
             else return sum + Bias;
         }
 
-        public double[] Compute(double[,] inputs, bool doActivation = true)
+        public double[] Compute(double[][] inputs, bool doActivation = true)
         {
-            double[] toReturn = new double[inputs.GetLength(0)];
-            if (Weights.Length != inputs.GetLength(1)) throw new ArgumentException("bad inputs");
-            for(int i = 0; i < inputs.GetLength(0); i++)
+            double[] toReturn = new double[inputs.Length];
+            for (int i = 0; i < inputs.Length; i++)
             {
-                Span<double> rowSpan = CreateSpan(ref inputs[i, 0], inputs.GetLength(1));
-                toReturn[i] = Compute(rowSpan.ToArray(), doActivation);
+                if (Weights.Length != inputs[i].Length) throw new ArgumentException("bad inputs");
+                toReturn[i] = Compute(inputs[i], doActivation);
             }
             return toReturn;
         }
-        public double GetError(double[,] inputs, double[] targets)
+        public double GetError(double[][] inputs, double[] targets)
         {
-            double[] result = new double[inputs.GetLength(0)];
+            double[] result = new double[inputs.Length];
             result = Compute(inputs);
-            for(int i = 0; i < result.Length; i++)
+            for (int i = 0; i < result.Length; i++)
             {
                 result[i] = Error.Compute(result[i], targets[i]);
             }
@@ -83,7 +81,7 @@ namespace CommonLib
                 Weights[index] += (random.NextDouble() - 0.5) * 2 * MutationAmount;
             }
         }
-        public double TrainWithHillClimbing(double[,] inputs, double[] targets, double currentError)
+        public double TrainWithHillClimbing(double[][] inputs, double[] targets, double currentError)
         {
             double[] lastWeights = Weights.ToArray();
             double lastBias = Bias;
@@ -112,12 +110,11 @@ namespace CommonLib
             Bias -= pd;
             return Error.Compute(Compute(inputs), desired);
         }
-        public double TrainWithGradientDecent(double[,] inputs, double[] desired)
+        public double TrainWithGradientDecent(double[][] inputs, double[] desired)
         {
-            for (int i = 0; i < inputs.GetLength(0); i++)
+            for (int i = 0; i < inputs.Length; i++)
             {
-                Span<double> rowSpan = CreateSpan(ref inputs[i, 0], inputs.GetLength(1));
-                TrainWithGradientDecent(rowSpan.ToArray(), desired[i]);
+                TrainWithGradientDecent(inputs[i], desired[i]);
             }
             return GetError(inputs, desired);
         }

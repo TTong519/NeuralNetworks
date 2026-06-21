@@ -2,6 +2,7 @@
   <Project Path="CommonLib/CommonLib.csproj" />
   <Project Path="FlappyBirdGeneticLearning/FlappyBirdGeneticLearning.csproj" Id="da80537d-e38e-449c-b709-b2d7a4ca888a" />
   <Project Path="LineOfBestFit/LineOfBestFit.csproj" Id="1985b222-ad70-4baa-984b-fb4f339a36a4" />
+  <Project Path="NNAsSin/NNAsSin.csproj" Id="a0c0de06-81c6-42a0-b078-4340c8ed512f" />
   <Project Path="NNAsXOR/NNAsXOR.csproj" Id="b6c11772-ebdd-421e-b88d-abf24f4af2a2" />
   <Project Path="PerceptronTest/PerceptronAsAnd.csproj" Id="7b7b9bc0-c03a-490a-8c65-d68224418abc" />
 </Solution>

@@ -10,6 +10,7 @@ namespace CommonLib
         public Neuron Next { get; }
         public double Weight { get; internal set; }
         public double WeightUpdate { get; set; }
+        public double LastWeightUpdate { get; set; }
         public Dendrite(Neuron previous, Neuron next, double weight)
         {
             Previous = previous;
@@ -23,6 +24,7 @@ namespace CommonLib
         public void ApplyUpdate()
         {
             Weight += WeightUpdate;
+            LastWeightUpdate = WeightUpdate;
             WeightUpdate = 0;
         }
     }

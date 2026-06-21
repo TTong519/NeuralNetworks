@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace CommonLib
 {
@@ -70,6 +68,20 @@ namespace CommonLib
                 }
             }
         }
+        public void ApplyMomentum(double momentum)
+        {
+            foreach (Layer l in Layers)
+            {
+                foreach (Neuron n in l.Neurons)
+                {
+                    n.BiasUpdate += n.LastBiasUpdate * momentum;
+                    foreach (Dendrite d in n.Dendrites)
+                    {
+                        d.WeightUpdate += d.LastWeightUpdate * momentum;
+                    }
+                }
+            }
+        }
         public void ApplyUpdate()
         {
             foreach(Layer l in Layers)
@@ -79,33 +91,66 @@ namespace CommonLib
         }
         public void Backprop(double learningRate, double[] desiredOutputs)
         {
+            for (int layer = 1; layer < Layers.Length; layer++)
+            {
+                foreach (Neuron n in Layers[layer].Neurons)
+                {
+                    n.Delta = 0;
+                }
+            }
+
             for(int i = 0; i < Layers.Last().Neurons.Length; i++)
             {
-                Layers.Last().Neurons[i].Delta = Error.ComputeDerivative(Layers.Last().Neurons[i].Output, desiredOutputs[i]);
+                double errorDerivative = Error.ComputeDerivative(Layers.Last().Neurons[i].Output, desiredOutputs[i]);
+                double activationDerivative = Layers.Last().Neurons[i].Activation.ComputeDerivative(Layers.Last().Neurons[i].Output);
+                Layers.Last().Neurons[i].Delta = errorDerivative * activationDerivative;
             }
             for(int i = Layers.Length - 1; i > 0; i--)
             {
                 Layers[i].Backprop(learningRate);
             }
         }
-        public double[] Train(double[,] inputs, double[,] desiredOutputs, double learningRate)
+        public double[] Train(double[][] inputs, double[][] desiredOutputs, double learningRate, double momentum)
         {
             List<double> errors = new List<double>();
-            for( int i = 0; i < inputs.GetLength(0); i++)
+            for (int i = 0; i < inputs.Length; i++)
             {
-                Span<double> inputsSpan = MemoryMarshal.CreateSpan(ref inputs[i, 0], inputs.GetLength(1));
                 List<double> error = new List<double>();
-                double[] outs = Compute(inputsSpan.ToArray());
+                double[] outs = Compute(inputs[i]);
                 for (int j = 0; j < outs.Length; j++)
                 {
-                    error.Add(Error.Compute(outs[j], desiredOutputs[i, j]));
+                    error.Add(Error.Compute(outs[j], desiredOutputs[i][j]));
                 }
                 errors.Add(error.Average());
-                Span<double> desiredSpan = MemoryMarshal.CreateSpan(ref desiredOutputs[i, 0], inputs.GetLength(1));
-                Backprop(learningRate, desiredSpan.ToArray());
+                Backprop(learningRate, desiredOutputs[i]);
+                ApplyMomentum(momentum);
                 ApplyUpdate();
             }
             return errors.ToArray();
+        }
+        public double[] BatchTrain(double[][] inputs, double[][] desiredOutputs, double learningRate, double momentum, double batchSize)
+        {
+            List<double> batchErrors = new List<double>();
+            int numSamples = inputs.Length;
+            int actualBatchSize = (int)batchSize;
+            for (int batchStart = 0; batchStart < numSamples; batchStart += actualBatchSize)
+            {
+                int batchEnd = batchStart + actualBatchSize > numSamples ? numSamples : batchStart + actualBatchSize;
+                List<double> currentBatchErrors = new List<double>();
+                for (int i = batchStart; i < batchEnd; i++)
+                {
+                    double[] outs = Compute(inputs[i]);
+                    for (int j = 0; j < outs.Length; j++)
+                    {
+                        currentBatchErrors.Add(Error.Compute(outs[j], desiredOutputs[i][j]));
+                    }
+                    Backprop(learningRate, desiredOutputs[i]);
+                }
+                ApplyMomentum(momentum);
+                ApplyUpdate();
+                batchErrors.Add(currentBatchErrors.Average());
+            }
+            return batchErrors.ToArray();
         }
     }
 }

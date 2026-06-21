@@ -30,11 +30,11 @@ namespace LineOfBestFit
         {
             PointF[] points = Points.Select(p => new PointF(p.X, p.Y)).ToArray();
             points.Normalize(new(0, 0), new(Display.Width, Display.Height), new(0, 0), new(5, 5));
-            double[,] inputs = new double[Points.Count, 1];
+            double[][] inputs = new double[Points.Count][];
             double[] targets = new double[Points.Count];
             foreach (var (point, index) in points.Select((value, i) => (value, i)))
             {
-                inputs[index, 0] = point.X;
+                inputs[index] = new[] { (double)point.X };
                 targets[index] = point.Y;
             }
             for (int i = 0; i < 1000; i++)
