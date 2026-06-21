@@ -34,7 +34,7 @@ namespace CommonLib
         );
         public static ActivationFunc TanH = new(
             input => System.Math.Tanh(input),
-            input => 1 - System.Math.Pow(System.Math.Tanh(input), 2)
+            input => 1 - (input * input)
         );
         public static ActivationFunc ReLU = new(
             input => System.Math.Max(0, input),

@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MonoGame.Extended" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj" />
   </ItemGroup>
 

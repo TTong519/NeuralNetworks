@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Numerics;
 
 namespace CommonLib
 {
@@ -43,9 +44,9 @@ namespace CommonLib
             }
             return total / list.Count;
         }
-        public static void Normalize(this ref double val, double min, double max, double dmin, double dmax)
+        public static void Normalize(this ref double value, double min, double max, double dmin, double dmax)
         {
-            val = ((val - min) / (max - min)) * (dmax - dmin) + dmin;
+            value = ((value - min) / (max - min)) * (dmax - dmin) + dmin;
         }
         public static void Normalize(this double[] vals, double dmin, double dmax)
         {
@@ -83,6 +84,12 @@ namespace CommonLib
             {
                 points[i] = new(((points[i].X - min.X) / (max.X - min.X)) * (dmax.X - dmin.X) + dmin.X, ((points[i].Y - min.Y) / (max.Y - min.Y)) * (dmax.Y - dmin.Y) + dmin.Y);
             }
+        }
+        public static Vector2 Normalize(Vector2 point, Vector2 minimum, Vector2 max, Vector2 dmin, Vector2 dmax)
+        {
+            point.X = ((point.X - minimum.X) / (max.X - minimum.X)) * (dmax.X - dmin.X) + dmin.X;
+            point.Y = ((point.Y - minimum.Y) / (max.Y - minimum.Y)) * (dmax.Y - dmin.Y) + dmin.Y;
+            return point;
         }
         public static double Identity(double val)
         {

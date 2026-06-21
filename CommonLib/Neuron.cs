@@ -49,15 +49,15 @@ namespace CommonLib
                 d.ApplyUpdate();
             }
             Bias += BiasUpdate;
-            BiasUpdate = 0;
             LastBiasUpdate = BiasUpdate;
+            BiasUpdate = 0;
         }
         public void Backprop(double learningRate)
         {
             double activationDerivative = Activation.ComputeDerivative(Output);
             foreach(var d in Dendrites)
             {
-                d.Previous.Delta = Delta * activationDerivative * d.Weight;
+                d.Previous.Delta += Delta * activationDerivative * d.Weight;
                 d.WeightUpdate -= learningRate * Delta * activationDerivative * d.Previous.Output;
             }
             BiasUpdate -= learningRate * Delta * activationDerivative;
