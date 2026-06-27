@@ -95,5 +95,9 @@ namespace CommonLib
         {
             return val;
         }
+        public static double Sigmoid(double val)
+        {
+            return 1 / (1 + System.Math.Exp(-val));
+        }
     }
 }

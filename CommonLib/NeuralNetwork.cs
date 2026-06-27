@@ -89,13 +89,16 @@ namespace CommonLib
                 l.ApplyUpdate();
             }
         }
-        public void Backprop(double learningRate, double[] desiredOutputs)
+        public void Backprop(double learningRate, double[] desiredOutputs, bool resetDeltas = true)
         {
-            for (int layer = 1; layer < Layers.Length; layer++)
+            if (resetDeltas)
             {
-                foreach (Neuron n in Layers[layer].Neurons)
+                for (int layer = 1; layer < Layers.Length; layer++)
                 {
-                    n.Delta = 0;
+                    foreach (Neuron n in Layers[layer].Neurons)
+                    {
+                        n.Delta = 0;
+                    }
                 }
             }
 
@@ -103,7 +106,14 @@ namespace CommonLib
             {
                 double errorDerivative = Error.ComputeDerivative(Layers.Last().Neurons[i].Output, desiredOutputs[i]);
                 double activationDerivative = Layers.Last().Neurons[i].Activation.ComputeDerivative(Layers.Last().Neurons[i].Output);
-                Layers.Last().Neurons[i].Delta = errorDerivative * activationDerivative;
+                if (resetDeltas)
+                {
+                    Layers.Last().Neurons[i].Delta = errorDerivative * activationDerivative;
+                }
+                else
+                {
+                    Layers.Last().Neurons[i].Delta += errorDerivative * activationDerivative;
+                }
             }
             for(int i = Layers.Length - 1; i > 0; i--)
             {
@@ -144,7 +154,8 @@ namespace CommonLib
                     {
                         currentBatchErrors.Add(Error.Compute(outs[j], desiredOutputs[i][j]));
                     }
-                    Backprop(learningRate, desiredOutputs[i]);
+                    bool isFirstSampleInBatch = (i == batchStart);
+                    Backprop(learningRate, desiredOutputs[i], resetDeltas: isFirstSampleInBatch);
                 }
                 ApplyMomentum(momentum);
                 ApplyUpdate();

@@ -4,9 +4,6 @@
     <Build Solution="Debug|*" Project="false" />
   </Project>
   <Project Path="LineOfBestFit/LineOfBestFit.csproj" Id="1985b222-ad70-4baa-984b-fb4f339a36a4" />
-  <Project Path="NNAsSin/NNAsSin.csproj" Id="a0c0de06-81c6-42a0-b078-4340c8ed512f">
-    <Build Solution="Debug|*" Project="false" />
-  </Project>
   <Project Path="NNAsXOR/NNAsXOR.csproj" Id="b6c11772-ebdd-421e-b88d-abf24f4af2a2">
     <Build Solution="Debug|*" Project="false" />
   </Project>
