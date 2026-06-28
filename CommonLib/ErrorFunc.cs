@@ -26,6 +26,6 @@ namespace CommonLib
     public static class ErrorFuncs
     {
         public static ErrorFunc MAE = new((val, target) => System.Math.Abs(val - target), (val, target) => val > target ? 1 : -1);
-        public static ErrorFunc MSE = new((val, target) => System.Math.Pow(val - target, 2), (val, target) => 2 * (val - target));
+        public static ErrorFunc MSE = new((val, target) => System.Math.Pow(val - target, 2), (val, target) => -2 * (val - target));
     }
 }
