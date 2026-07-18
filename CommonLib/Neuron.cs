@@ -54,12 +54,13 @@ namespace CommonLib
         }
         public void Backprop(double learningRate)
         {
+            double activationDerivative = Activation.ComputeDerivative(Input);
             foreach (var d in Dendrites)
             {
-                d.Previous.Delta += Delta * d.Weight;
+                d.Previous.Delta = Delta * d.Weight * activationDerivative;
                 d.WeightUpdate -= learningRate * Delta * d.Previous.Output;
             }
-            BiasUpdate -= learningRate * Delta;
+            BiasUpdate -= learningRate * Delta * activationDerivative;
             Delta = 0;
         }
     }

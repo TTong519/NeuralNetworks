@@ -105,14 +105,13 @@ namespace CommonLib
             for(int i = 0; i < Layers.Last().Neurons.Length; i++)
             {
                 double errorDerivative = Error.ComputeDerivative(Layers.Last().Neurons[i].Output, desiredOutputs[i]);
-                double activationDerivative = Layers.Last().Neurons[i].Activation.ComputeDerivative(Layers.Last().Neurons[i].Output);
                 if (resetDeltas)
                 {
-                    Layers.Last().Neurons[i].Delta = errorDerivative * activationDerivative;
+                    Layers.Last().Neurons[i].Delta = errorDerivative;
                 }
                 else
                 {
-                    Layers.Last().Neurons[i].Delta += errorDerivative * activationDerivative;
+                    Layers.Last().Neurons[i].Delta += errorDerivative;
                 }
             }
             for(int i = Layers.Length - 1; i > 0; i--)
