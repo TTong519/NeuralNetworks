@@ -8,5 +8,7 @@
     <Build Solution="Debug|*" Project="false" />
   </Project>
   <Project Path="PerceptronTest/PerceptronAsAnd.csproj" Id="7b7b9bc0-c03a-490a-8c65-d68224418abc" />
-  <Project Path="TicTacToe/TicTacToe.csproj" Id="83ddd80c-39b1-4e74-9887-123d694da664" />
+  <Project Path="TicTacToe/TicTacToe.csproj" Id="83ddd80c-39b1-4e74-9887-123d694da664">
+    <Build Solution="Release|*" Project="false" />
+  </Project>
 </Solution>

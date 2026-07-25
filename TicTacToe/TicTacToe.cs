@@ -71,21 +71,22 @@ namespace TicTacToe
             {
                 return children.ToArray();
             }
-            foreach(int[] row in Board)
+            for(int i = 0; i < 3; i++)
             {
-                foreach (int cell in row)
+                for(int j = 0; j < 3; j++)
                 {
-                    if (cell == 0)
+                    if (Board[i][j] == 0)
                     {
                         int[][] newBoard = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
-                        for(int i = 0; i < 3; i++)
+                        for(int k = 0; k < 3; k++)
                         {
-                            for (int j = 0; j < 3; j++)
+                            for (int l = 0; l < 3; l++)
                             {
-                                newBoard[i][j] = Board[i][j];
+                                newBoard[k][l] = Board[k][l];
                             }
                         }
-                        newBoard[Array.IndexOf(newBoard, row)][Array.IndexOf(row, cell)] = isMax ? 1 : -1;
+
+                        newBoard[i][j] = isMax ? 1 : -1;
                         switch (CheckEnd(newBoard))
                         {
                             case 1:

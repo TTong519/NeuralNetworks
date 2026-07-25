@@ -15,7 +15,6 @@ namespace TicTacToe
         Texture2D OTexture;
         Texture2D XTexture;
         bool isMax;
-        int counter;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -29,8 +28,7 @@ namespace TicTacToe
 
             base.Initialize();
             currentState = new TicTacToe(false, false, false, false, [[0, 0, 0], [0, 0, 0], [0, 0, 0]]);
-            isMax = false;
-            counter = 0;
+            isMax = true;
             graphics.PreferredBackBufferWidth = 900;
             graphics.PreferredBackBufferHeight = 900;
             graphics.ApplyChanges();
@@ -51,12 +49,25 @@ namespace TicTacToe
                 Exit();
 
             // TODO: Add your update logic here
-            counter++;
-            if(counter % 500 == 0)
+            if(isMax)
             {
                 var (value, nextState) = Minimax(currentState, isMax);
                 isMax = !isMax;
                 currentState = nextState;
+            }
+            else if(!currentState.IsTerminal)
+            {
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                {
+                    var mousePosition = Mouse.GetState().Position;
+                    int x = mousePosition.X / 300;
+                    int y = mousePosition.Y / 300;
+                    if (currentState.Board[x][y] == 0)
+                    {
+                        currentState.Board[x][y] = -1;
+                        isMax = !isMax;
+                    }
+                }
             }
 
             base.Update(gameTime);

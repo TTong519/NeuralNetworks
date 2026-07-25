@@ -27,6 +27,7 @@ namespace CommonLib
                     if(value.Item1 > bestValue.Item1)
                     {
                         bestValue = value;
+                        bestValue.state = child;
                     }
                 }
                 else
@@ -34,6 +35,7 @@ namespace CommonLib
                     if (value.Item1 < bestValue.Item1)
                     {
                         bestValue = value;
+                        bestValue.state = child;
                     }
                 }
             }
