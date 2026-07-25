@@ -8,7 +8,7 @@ namespace CommonLib
 {
     public static class MinimaxTree
     {
-        public static (int, T) Minimax<T>(T state, bool isMax) where T : IGameState<T>
+        public static (int, T) Minimax<T>(T state, bool isMax, int alpha = int.MinValue, int beta = int.MaxValue) where T : IGameState<T>
         {
             if (state.IsTerminal)
             {
@@ -21,13 +21,17 @@ namespace CommonLib
 
             foreach (var child in children)
             {
-                var value = Minimax(child, !isMax);
+                var value = Minimax(child, !isMax, alpha, beta);
                 if(isMax)
                 {
                     if(value.Item1 > bestValue.Item1)
                     {
                         bestValue = value;
                         bestValue.state = child;
+                    }
+                    if(value.Item1 >= alpha)
+                    {
+                        alpha = value.Item1;
                     }
                 }
                 else
@@ -37,6 +41,14 @@ namespace CommonLib
                         bestValue = value;
                         bestValue.state = child;
                     }
+                    if(value.Item1 <= beta)
+                    {
+                        beta = value.Item1;
+                    }
+                }
+                if(alpha >= beta)
+                {
+                    break;
                 }
             }
 
