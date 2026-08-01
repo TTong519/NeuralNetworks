@@ -4,6 +4,7 @@
     <Build Solution="Debug|*" Project="false" />
   </Project>
   <Project Path="LineOfBestFit/LineOfBestFit.csproj" Id="1985b222-ad70-4baa-984b-fb4f339a36a4" />
+  <Project Path="MonteCarloCheckers/MonteCarloCheckers.csproj" Id="e74150eb-4a63-4f60-b373-2cdaeee1cb2e" />
   <Project Path="NNAsXOR/NNAsXOR.csproj" Id="b6c11772-ebdd-421e-b88d-abf24f4af2a2">
     <Build Solution="Debug|*" Project="false" />
   </Project>
