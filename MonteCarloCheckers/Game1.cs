@@ -43,14 +43,14 @@ namespace MonteCarloCheckers
             board = Content.Load<Texture2D>("board");
             PieceState[,] initialBoard = new PieceState[8, 8]
             {
-                { PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black },
+                { PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red   },
+                { PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty },
+                { PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red   },
+                { PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty },
+                { PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty },
                 { PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty },
                 { PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black },
-                { PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty },
-                { PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty },
-                { PieceState.Red, PieceState.Empty, PieceState.Red, PieceState.Empty, PieceState.Red, PieceState.Empty, PieceState.Red, PieceState.Empty },
-                { PieceState.Empty, PieceState.Red, PieceState.Empty, PieceState.Red, PieceState.Empty, PieceState.Red, PieceState.Empty, PieceState.Red },
-                { PieceState.Red, PieceState.Empty, PieceState.Red, PieceState.Empty, PieceState.Red, PieceState.Empty, PieceState.Red, PieceState.Empty }
+                { PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty }
             };
             CurrentState = new CheckersState(initialBoard);
         }

@@ -50,14 +50,7 @@ namespace MonteCarloCheckers
                             {
                                 if (i != 0 && j != 7)
                                 {
-                                    if (Board[i - 1, j + 1] == PieceState.Empty)
-                                    {
-                                        var newBoard = (PieceState[,])Board.Clone();
-                                        newBoard[i, j] = PieceState.Empty;
-                                        newBoard[i - 1, j + 1] = PieceState.Red;
-                                        Children.Add(new CheckersState(newBoard));
-                                    }
-                                    else if (i > 1 && j < 6 && (Board[i - 1, j + 1] == PieceState.Black || Board[i - 1, j + 1] == PieceState.BlackKing) && Board[i - 2, j + 2] == PieceState.Empty)
+                                    if (i > 1 && j < 6 && (Board[i - 1, j + 1] == PieceState.Black || Board[i - 1, j + 1] == PieceState.BlackKing) && Board[i - 2, j + 2] == PieceState.Empty)
                                     {
                                         var newBoard = (PieceState[,])Board.Clone();
                                         newBoard[i, j] = PieceState.Empty;
@@ -65,22 +58,29 @@ namespace MonteCarloCheckers
                                         newBoard[i - 2, j + 2] = PieceState.Red;
                                         Children.Add(new CheckersState(newBoard));
                                     }
-                                }
-                                if (i != 7 && j != 7)
-                                {
-                                    if (Board[i + 1, j + 1] == PieceState.Empty)
+                                    else if (Board[i - 1, j + 1] == PieceState.Empty)
                                     {
                                         var newBoard = (PieceState[,])Board.Clone();
                                         newBoard[i, j] = PieceState.Empty;
-                                        newBoard[i + 1, j + 1] = PieceState.Red;
+                                        newBoard[i - 1, j + 1] = PieceState.Red;
                                         Children.Add(new CheckersState(newBoard));
                                     }
-                                    else if (i < 6 && j < 6 && (Board[i + 1, j + 1] == PieceState.Black || Board[i + 1, j + 1] == PieceState.BlackKing) && Board[i + 2, j + 2] == PieceState.Empty)
+                                }
+                                if (i != 7 && j != 7)
+                                {
+                                    if (i < 6 && j < 6 && (Board[i + 1, j + 1] == PieceState.Black || Board[i + 1, j + 1] == PieceState.BlackKing) && Board[i + 2, j + 2] == PieceState.Empty)
                                     {
                                         var newBoard = (PieceState[,])Board.Clone();
                                         newBoard[i, j] = PieceState.Empty;
                                         newBoard[i + 1, j + 1] = PieceState.Empty;
                                         newBoard[i + 2, j + 2] = PieceState.Red;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                    else if (Board[i + 1, j + 1] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i + 1, j + 1] = PieceState.Red;
                                         Children.Add(new CheckersState(newBoard));
                                     }
                                 }
@@ -89,7 +89,43 @@ namespace MonteCarloCheckers
                         case PieceState.Black:
                             if (!isMax)
                             {
-                                // Generate moves for Black piece
+                                if (i != 0 && j != 0)
+                                {
+
+                                    if (i > 1 && j > 1 && (Board[i - 1, j - 1] == PieceState.Red || Board[i - 1, j - 1] == PieceState.RedKing) && Board[i - 2, j - 2] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i - 1, j - 1] = PieceState.Empty;
+                                        newBoard[i - 2, j - 2] = PieceState.Black;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                    else if (Board[i - 1, j - 1] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i - 1, j - 1] = PieceState.Black;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                }
+                                if (i != 7 && j != 0)
+                                {
+                                    if (i < 6 && j > 1 && (Board[i + 1, j - 1] == PieceState.Red || Board[i + 1, j - 1] == PieceState.RedKing) && Board[i + 2, j - 2] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i + 1, j - 1] = PieceState.Empty;
+                                        newBoard[i + 2, j - 2] = PieceState.Black;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                    else if (Board[i + 1, j - 1] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i + 1, j - 1] = PieceState.Black;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                }
                             }
                             break;
                         case PieceState.RedKing:
