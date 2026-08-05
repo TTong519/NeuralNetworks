@@ -28,7 +28,7 @@ namespace TicTacToe
 
             base.Initialize();
             currentState = new TicTacToe(false, false, false, false, [[0, 0, 0], [0, 0, 0], [0, 0, 0]]);
-            isMax = true;
+            isMax = false;
             graphics.PreferredBackBufferWidth = 900;
             graphics.PreferredBackBufferHeight = 900;
             graphics.ApplyChanges();
