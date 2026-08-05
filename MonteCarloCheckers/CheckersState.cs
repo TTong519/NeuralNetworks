@@ -15,7 +15,7 @@ namespace MonteCarloCheckers
         BlackKing,
         Empty
     }
-    public class CheckersState : IMCGameState<CheckersState>
+    public class CheckersState : IMonteCarloGameState<CheckersState>
     {
         public bool IsWin { get; set; }
         public bool IsLoss { get; set; }
@@ -131,13 +131,163 @@ namespace MonteCarloCheckers
                         case PieceState.RedKing:
                             if (isMax)
                             {
-                                // Generate moves for Red King piece
+                                // Up-left diagonal
+                                if (i != 0 && j != 0)
+                                {
+                                    if (i > 1 && j > 1 && (Board[i - 1, j - 1] == PieceState.Black || Board[i - 1, j - 1] == PieceState.BlackKing) && Board[i - 2, j - 2] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i - 1, j - 1] = PieceState.Empty;
+                                        newBoard[i - 2, j - 2] = PieceState.RedKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                    else if (Board[i - 1, j - 1] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i - 1, j - 1] = PieceState.RedKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                }
+                                // Up-right diagonal
+                                if (i != 0 && j != 7)
+                                {
+                                    if (i > 1 && j < 6 && (Board[i - 1, j + 1] == PieceState.Black || Board[i - 1, j + 1] == PieceState.BlackKing) && Board[i - 2, j + 2] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i - 1, j + 1] = PieceState.Empty;
+                                        newBoard[i - 2, j + 2] = PieceState.RedKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                    else if (Board[i - 1, j + 1] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i - 1, j + 1] = PieceState.RedKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                }
+                                // Down-left diagonal
+                                if (i != 7 && j != 0)
+                                {
+                                    if (i < 6 && j > 1 && (Board[i + 1, j - 1] == PieceState.Black || Board[i + 1, j - 1] == PieceState.BlackKing) && Board[i + 2, j - 2] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i + 1, j - 1] = PieceState.Empty;
+                                        newBoard[i + 2, j - 2] = PieceState.RedKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                    else if (Board[i + 1, j - 1] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i + 1, j - 1] = PieceState.RedKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                }
+                                // Down-right diagonal
+                                if (i != 7 && j != 7)
+                                {
+                                    if (i < 6 && j < 6 && (Board[i + 1, j + 1] == PieceState.Black || Board[i + 1, j + 1] == PieceState.BlackKing) && Board[i + 2, j + 2] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i + 1, j + 1] = PieceState.Empty;
+                                        newBoard[i + 2, j + 2] = PieceState.RedKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                    else if (Board[i + 1, j + 1] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i + 1, j + 1] = PieceState.RedKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                }
                             }
                             break;
                         case PieceState.BlackKing:
                             if (!isMax)
                             {
-                                // Generate moves for Black King piece
+                                // Up-left diagonal
+                                if (i != 0 && j != 0)
+                                {
+                                    if (i > 1 && j > 1 && (Board[i - 1, j - 1] == PieceState.Red || Board[i - 1, j - 1] == PieceState.RedKing) && Board[i - 2, j - 2] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i - 1, j - 1] = PieceState.Empty;
+                                        newBoard[i - 2, j - 2] = PieceState.BlackKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                    else if (Board[i - 1, j - 1] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i - 1, j - 1] = PieceState.BlackKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                }
+                                // Up-right diagonal
+                                if (i != 0 && j != 7)
+                                {
+                                    if (i > 1 && j < 6 && (Board[i - 1, j + 1] == PieceState.Red || Board[i - 1, j + 1] == PieceState.RedKing) && Board[i - 2, j + 2] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i - 1, j + 1] = PieceState.Empty;
+                                        newBoard[i - 2, j + 2] = PieceState.BlackKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                    else if (Board[i - 1, j + 1] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i - 1, j + 1] = PieceState.BlackKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                }
+                                // Down-left diagonal
+                                if (i != 7 && j != 0)
+                                {
+                                    if (i < 6 && j > 1 && (Board[i + 1, j - 1] == PieceState.Red || Board[i + 1, j - 1] == PieceState.RedKing) && Board[i + 2, j - 2] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i + 1, j - 1] = PieceState.Empty;
+                                        newBoard[i + 2, j - 2] = PieceState.BlackKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                    else if (Board[i + 1, j - 1] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i + 1, j - 1] = PieceState.BlackKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                }
+                                // Down-right diagonal
+                                if (i != 7 && j != 7)
+                                {
+                                    if (i < 6 && j < 6 && (Board[i + 1, j + 1] == PieceState.Red || Board[i + 1, j + 1] == PieceState.RedKing) && Board[i + 2, j + 2] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i + 1, j + 1] = PieceState.Empty;
+                                        newBoard[i + 2, j + 2] = PieceState.BlackKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                    else if (Board[i + 1, j + 1] == PieceState.Empty)
+                                    {
+                                        var newBoard = (PieceState[,])Board.Clone();
+                                        newBoard[i, j] = PieceState.Empty;
+                                        newBoard[i + 1, j + 1] = PieceState.BlackKing;
+                                        Children.Add(new CheckersState(newBoard));
+                                    }
+                                }
                             }
                             break;
                         default:

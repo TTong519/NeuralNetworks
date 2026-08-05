@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CommonLib
 {
-    public interface IMCGameState<T> where T : IMCGameState<T>
+    public interface IMonteCarloGameState<T> where T : IMonteCarloGameState<T>
     {
         public bool IsWin { get; set; }
         public bool IsLoss { get; set; }
