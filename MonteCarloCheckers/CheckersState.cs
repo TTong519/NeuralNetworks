@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,12 +71,12 @@ namespace MonteCarloCheckers
 
         private static readonly (int rowDelta, int colDelta)[] RedPawnMoveDirections = new (int, int)[]
         {
-            (-1, 1), (1, 1)
+            (1, -1), (1, 1)
         };
 
         private static readonly (int rowDelta, int colDelta)[] BlackPawnMoveDirections = new (int, int)[]
         {
-            (-1, -1), (1, -1)
+            (-1, -1), (-1, 1)
         };
 
         public void GenerateChildren(bool isMax)
@@ -234,8 +235,8 @@ namespace MonteCarloCheckers
                 newBoard[captureRow.Value, captureCol.Value] = PieceState.Empty;
             }
 
-            bool isPromotion = (piece == PieceState.Red && toRow == 0) ||
-                               (piece == PieceState.Black && toRow == 7);
+            bool isPromotion = (piece == PieceState.Black && toRow == 0) ||
+                               (piece == PieceState.Red && toRow == 7);
 
             if (isPromotion)
             {
@@ -274,6 +275,19 @@ namespace MonteCarloCheckers
         private static bool IsOnBoard(int row, int col)
         {
             return row >= 0 && row < 8 && col >= 0 && col < 8;
+        }
+        
+        public List<CheckersState> MovesByPiece(Point point)
+        {
+            List<CheckersState> moves = new List<CheckersState>();
+            foreach (var child in Children)
+            {
+                if (child.Board[point.X, point.Y] != Board[point.X, point.Y] && Board[point.X, point.Y] != PieceState.Empty)
+                {
+                    moves.Add(child);
+                }
+            }
+            return moves;
         }
     }
 }
