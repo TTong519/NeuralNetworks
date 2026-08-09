@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="MonteCarlo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="MonteCarlo.cs" />
+  </ItemGroup>
+
 </Project>

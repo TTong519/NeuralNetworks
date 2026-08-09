@@ -121,14 +121,17 @@ namespace MonteCarloCheckers
 
             if (Children.Count == 0)
             {
-                var terminalState = new CheckersState((PieceState[,])Board.Clone())
+                IsTerminal = true;
+                IsWin = !isMax;
+                IsLoss = isMax;
+                if(isMax)
                 {
-                    IsTerminal = true,
-                    IsLoss = true
-                };
-
-                Children.Add(terminalState);
-                return;
+                    Value = -1000;
+                }
+                else
+                {
+                    Value = 1000;
+                }
             }
 
             var enemyPieces = GetEnemyPieces(isMax);
@@ -151,10 +154,19 @@ namespace MonteCarloCheckers
 
             if (!enemyHasPieces)
             {
-                foreach (var child in Children)
+                if(isMax)
                 {
-                    child.IsTerminal = true;
-                    child.IsWin = true;
+                    IsTerminal = true;
+                    IsWin = true;
+                    IsLoss = false;
+                    Value = 1000;
+                }
+                else
+                {
+                    IsTerminal = true;
+                    IsWin = false;
+                    IsLoss = true;
+                    Value = -1000;
                 }
             }
         }

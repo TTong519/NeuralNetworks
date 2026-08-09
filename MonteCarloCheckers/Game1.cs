@@ -20,6 +20,7 @@ namespace MonteCarloCheckers
         public MouseState mouseState;
         public bool isMax;
         public List<CheckersState> toHighlight;
+        public SpriteFont font;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -63,6 +64,7 @@ namespace MonteCarloCheckers
             };
             CurrentState = new CheckersState(initialBoard);
             CurrentState.GenerateChildren(isMax);
+            font = Content.Load<SpriteFont>("Arial");
         }
 
         protected override void Update(GameTime gameTime)
@@ -134,6 +136,11 @@ namespace MonteCarloCheckers
                         }
                     }
                 }
+            }
+            if(CurrentState.IsTerminal)
+            {
+                string winner = CurrentState.IsWin == true ? "Red" : "Black";
+                spriteBatch.DrawString(font, $"Winner: {winner}", new Vector2(10, 10), Color.White);
             }
             spriteBatch.End();
 
