@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using CommonLib;
+using Microsoft.Xna.Framework;
 
 namespace MonteCarloCheckers
 {
@@ -16,6 +12,7 @@ namespace MonteCarloCheckers
         BlackKing,
         Empty
     }
+
     public class CheckersState : IMonteCarloGameState<CheckersState>
     {
         public bool IsWin { get; set; }
@@ -26,6 +23,7 @@ namespace MonteCarloCheckers
         public int Count { get; set; }
         public List<CheckersState> Children { get; set; }
         public PieceState[,] Board { get; set; }
+
         public CheckersState(PieceState[,] board)
         {
             IsWin = false;
@@ -62,8 +60,10 @@ namespace MonteCarloCheckers
                     }
                 }
             }
+
             return value;
         }
+
         private static readonly (int rowDelta, int colDelta)[] KingMoveDirections = new (int, int)[]
         {
             (-1, -1), (-1, 1), (1, -1), (1, 1)
@@ -92,26 +92,32 @@ namespace MonteCarloCheckers
                         case PieceState.Red:
                             if (isMax)
                             {
-                                GeneratePawnMoves(row, col, RedPawnMoveDirections, PieceState.Black, PieceState.BlackKing, PieceState.Red);
+                                GeneratePawnMoves(row, col, RedPawnMoveDirections, PieceState.Black,
+                                    PieceState.BlackKing, PieceState.Red);
                             }
+
                             break;
                         case PieceState.Black:
                             if (!isMax)
                             {
-                                GeneratePawnMoves(row, col, BlackPawnMoveDirections, PieceState.Red, PieceState.RedKing, PieceState.Black);
+                                GeneratePawnMoves(row, col, BlackPawnMoveDirections, PieceState.Red, PieceState.RedKing,
+                                    PieceState.Black);
                             }
+
                             break;
                         case PieceState.RedKing:
                             if (isMax)
                             {
                                 GenerateKingMoves(row, col, PieceState.Black, PieceState.BlackKing, PieceState.RedKing);
                             }
+
                             break;
                         case PieceState.BlackKing:
                             if (!isMax)
                             {
                                 GenerateKingMoves(row, col, PieceState.Red, PieceState.RedKing, PieceState.BlackKing);
                             }
+
                             break;
                         default:
                             break;
@@ -124,7 +130,7 @@ namespace MonteCarloCheckers
                 IsTerminal = true;
                 IsWin = !isMax;
                 IsLoss = isMax;
-                if(isMax)
+                if (isMax)
                 {
                     Value = -1000;
                 }
@@ -146,6 +152,7 @@ namespace MonteCarloCheckers
                         break;
                     }
                 }
+
                 if (enemyHasPieces)
                 {
                     break;
@@ -154,7 +161,7 @@ namespace MonteCarloCheckers
 
             if (!enemyHasPieces)
             {
-                if(isMax)
+                if (isMax)
                 {
                     IsTerminal = true;
                     IsWin = true;
@@ -174,11 +181,12 @@ namespace MonteCarloCheckers
         private static HashSet<PieceState> GetEnemyPieces(bool isMax)
         {
             return isMax
-                ? new HashSet<PieceState> { PieceState.Black, PieceState.BlackKing }
-                : new HashSet<PieceState> { PieceState.Red, PieceState.RedKing };
+                ? new HashSet<PieceState> { PieceState.Red, PieceState.RedKing }
+                : new HashSet<PieceState> { PieceState.Black, PieceState.BlackKing };
         }
 
-        private void GeneratePawnMoves(int fromRow, int fromCol, (int rowDelta, int colDelta)[] directions, PieceState enemy, PieceState enemyKing, PieceState pawn)
+        private void GeneratePawnMoves(int fromRow, int fromCol, (int rowDelta, int colDelta)[] directions,
+            PieceState enemy, PieceState enemyKing, PieceState pawn)
         {
             foreach (var (rowDelta, colDelta) in directions)
             {
@@ -201,13 +209,15 @@ namespace MonteCarloCheckers
 
                     if (IsOnBoard(landingRow, landingCol) && Board[landingRow, landingCol] == PieceState.Empty)
                     {
-                        AddChild(fromRow, fromCol, landingRow, landingCol, pawn, isMax: true, captureRow: adjacentRow, captureCol: adjacentCol);
+                        AddChild(fromRow, fromCol, landingRow, landingCol, pawn, isMax: true, captureRow: adjacentRow,
+                            captureCol: adjacentCol);
                     }
                 }
             }
         }
 
-        private void GenerateKingMoves(int fromRow, int fromCol, PieceState enemy, PieceState enemyKing, PieceState king)
+        private void GenerateKingMoves(int fromRow, int fromCol, PieceState enemy, PieceState enemyKing,
+            PieceState king)
         {
             foreach (var (rowDelta, colDelta) in KingMoveDirections)
             {
@@ -230,13 +240,15 @@ namespace MonteCarloCheckers
 
                     if (IsOnBoard(landingRow, landingCol) && Board[landingRow, landingCol] == PieceState.Empty)
                     {
-                        AddChild(fromRow, fromCol, landingRow, landingCol, king, isMax: true, captureRow: adjacentRow, captureCol: adjacentCol);
+                        AddChild(fromRow, fromCol, landingRow, landingCol, king, isMax: true, captureRow: adjacentRow,
+                            captureCol: adjacentCol);
                     }
                 }
             }
         }
 
-        private void AddChild(int fromRow, int fromCol, int toRow, int toCol, PieceState piece, bool isMax, int? captureRow = null, int? captureCol = null)
+        private void AddChild(int fromRow, int fromCol, int toRow, int toCol, PieceState piece, bool isMax,
+            int? captureRow = null, int? captureCol = null)
         {
             var newBoard = (PieceState[,])Board.Clone();
             newBoard[fromRow, fromCol] = PieceState.Empty;
@@ -257,30 +269,6 @@ namespace MonteCarloCheckers
 
             var child = new CheckersState(newBoard);
 
-            var enemyPieces = GetEnemyPieces(isMax);
-            bool enemyHasPieces = false;
-            for (int row = 0; row < 8; row++)
-            {
-                for (int col = 0; col < 8; col++)
-                {
-                    if (enemyPieces.Contains(newBoard[row, col]))
-                    {
-                        enemyHasPieces = true;
-                        break;
-                    }
-                }
-                if (enemyHasPieces)
-                {
-                    break;
-                }
-            }
-
-            if (!enemyHasPieces)
-            {
-                child.IsTerminal = true;
-                child.IsWin = true;
-            }
-
             Children.Add(child);
         }
 
@@ -288,17 +276,19 @@ namespace MonteCarloCheckers
         {
             return row >= 0 && row < 8 && col >= 0 && col < 8;
         }
-        
+
         public List<CheckersState> MovesByPiece(Point point)
         {
             List<CheckersState> moves = new List<CheckersState>();
             foreach (var child in Children)
             {
-                if (child.Board[point.X, point.Y] != Board[point.X, point.Y] && Board[point.X, point.Y] != PieceState.Empty)
+                if (child.Board[point.X, point.Y] != Board[point.X, point.Y] &&
+                    Board[point.X, point.Y] != PieceState.Empty)
                 {
                     moves.Add(child);
                 }
             }
+
             return moves;
         }
     }

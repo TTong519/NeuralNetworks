@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using System.Collections.Generic;
 
 namespace MonteCarloCheckers
 {
@@ -21,6 +21,7 @@ namespace MonteCarloCheckers
         public bool isMax;
         public List<CheckersState> toHighlight;
         public SpriteFont font;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -53,14 +54,38 @@ namespace MonteCarloCheckers
             board = Content.Load<Texture2D>("board");
             PieceState[,] initialBoard = new PieceState[8, 8]
             {
-                { PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red   },
-                { PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty },
-                { PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red,   PieceState.Empty, PieceState.Red   },
-                { PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty },
-                { PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty },
-                { PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty },
-                { PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black },
-                { PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty }
+                {
+                    PieceState.Empty, PieceState.Red, PieceState.Empty, PieceState.Red, PieceState.Empty,
+                    PieceState.Red, PieceState.Empty, PieceState.Red
+                },
+                {
+                    PieceState.Red, PieceState.Empty, PieceState.Red, PieceState.Empty, PieceState.Red,
+                    PieceState.Empty, PieceState.Red, PieceState.Empty
+                },
+                {
+                    PieceState.Empty, PieceState.Red, PieceState.Empty, PieceState.Red, PieceState.Empty,
+                    PieceState.Red, PieceState.Empty, PieceState.Red
+                },
+                {
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty,
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty
+                },
+                {
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty,
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty
+                },
+                {
+                    PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black,
+                    PieceState.Empty, PieceState.Black, PieceState.Empty
+                },
+                {
+                    PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty,
+                    PieceState.Black, PieceState.Empty, PieceState.Black
+                },
+                {
+                    PieceState.Black, PieceState.Empty, PieceState.Black, PieceState.Empty, PieceState.Black,
+                    PieceState.Empty, PieceState.Black, PieceState.Empty
+                }
             };
             CurrentState = new CheckersState(initialBoard);
             CurrentState.GenerateChildren(isMax);
@@ -69,7 +94,8 @@ namespace MonteCarloCheckers
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+                Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
@@ -77,9 +103,10 @@ namespace MonteCarloCheckers
             if (mouseState.LeftButton == ButtonState.Pressed && prevLeftMouseState == ButtonState.Released)
             {
                 Point square = new Point(mouseState.Y / 125, mouseState.X / 125);
-                for(int i = 0; i < toHighlight.Count; i++)
+                for (int i = 0; i < toHighlight.Count; i++)
                 {
-                    if (toHighlight[i].Board[square.X, square.Y] != CurrentState.Board[square.X, square.Y] && toHighlight[i].Board[square.X, square.Y] != PieceState.Empty)
+                    if (toHighlight[i].Board[square.X, square.Y] != CurrentState.Board[square.X, square.Y] &&
+                        toHighlight[i].Board[square.X, square.Y] != PieceState.Empty)
                     {
                         CurrentState = toHighlight[i];
                         isMax = !isMax;
@@ -88,8 +115,10 @@ namespace MonteCarloCheckers
                         break;
                     }
                 }
+
                 toHighlight = CurrentState.MovesByPiece(square);
             }
+
             prevLeftMouseState = mouseState.LeftButton;
             base.Update(gameTime);
         }
@@ -101,7 +130,7 @@ namespace MonteCarloCheckers
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             spriteBatch.Draw(board, new Vector2(0, 0), Color.White);
-            for(int i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
@@ -123,25 +152,29 @@ namespace MonteCarloCheckers
                     }
                 }
             }
-            for(int i = 0; i < toHighlight.Count; i++)
+
+            for (int i = 0; i < toHighlight.Count; i++)
             {
-                for(int j = 0; j < 8; j++)
+                for (int j = 0; j < 8; j++)
                 {
                     for (int k = 0; k < 8; k++)
                     {
                         if (toHighlight[i].Board[j, k] != CurrentState.Board[j, k])
                         {
                             Vector2 position = new Vector2(k * 125, j * 125);
-                            spriteBatch.DrawRectangle(new Rectangle((int)position.X, (int)position.Y, 125, 125), Color.Yellow, 5);
+                            spriteBatch.DrawRectangle(new Rectangle((int)position.X, (int)position.Y, 125, 125),
+                                Color.Yellow, 5);
                         }
                     }
                 }
             }
-            if(CurrentState.IsTerminal)
+
+            if (CurrentState.IsTerminal)
             {
-                string winner = CurrentState.IsWin == true ? "Red" : "Black";
-                spriteBatch.DrawString(font, $"Winner: {winner}", new Vector2(10, 10), Color.White);
+                string winner = CurrentState.IsWin == true ? "Black" : "Red";
+                spriteBatch.DrawString(font, $"Winner: {winner}", new Vector2(10, 10), Color.Red);
             }
+
             spriteBatch.End();
 
             base.Draw(gameTime);
