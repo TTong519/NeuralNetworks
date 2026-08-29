@@ -25,26 +25,54 @@ namespace CommonLib
 		    while (current.Children.Count > 0)
 		    {
 			    double bestUCTValue = double.MinValue;
-			    T bestChild = default(T);
+			    T bestChild = default;
 			    foreach (var child in current.Children)
 			    {
-				    double UCT = (child.Count / child.Value) + 1.5 * (System.Math.Sqrt(System.Math.Log(root.Value)) / child.Value);
+				    double UCT = (child.Value / (double)child.Count) + 1.5 * (System.Math.Sqrt(System.Math.Log(current.Count) / child.Count));
 				    if (UCT > bestUCTValue)
 				    {
 					    bestUCTValue = UCT;
 					    bestChild = child;
 				    }
  			    }
-				current.Count++;
+				if(bestChild == null)
+                {
+                    break;
+                }
+                current.Count++;
 				current = bestChild;
 				isMax = !isMax;
             }
 		    return (current, isMax);
 	    }
-		private static void BackProp<T>(T state, bool isMax) where T : IMonteCarloGameState<T>
+		private static void BackProp<T>(T? state, bool isMax) where T : IMonteCarloGameState<T>
 		{
 			state.GenerateChildren(isMax);
-			BackProp(state.Children[Random.Shared.Next(0, state.Children.Count)], !isMax);
+			if(state.IsTerminal)
+			{
+				return;
+			}
+			double bestUCTValue = isMax ? double.MinValue : double.MaxValue;
+			T bestChild = default;
+			foreach (var child in state.Children)
+			{
+                double UCT = (child.Value / (double)child.Count) + 1.5 * (System.Math.Sqrt(System.Math.Log(state.Count) / child.Count));
+                if (isMax && UCT > bestUCTValue)
+                {
+                    bestUCTValue = UCT;
+                    bestChild = child;
+                }
+                else if (!isMax && UCT < bestUCTValue)
+                {
+                    bestUCTValue = UCT;
+                    bestChild = child;
+                }
+            }
+			if(bestChild != null)
+            {
+                BackProp(bestChild, !isMax);
+            }
+            
             foreach (var child in state.Children)
 			{
 				if(child.Value == int.MaxValue && isMax)

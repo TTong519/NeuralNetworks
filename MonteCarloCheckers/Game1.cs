@@ -89,7 +89,42 @@ namespace MonteCarloCheckers
                     PieceState.Empty, PieceState.Black, PieceState.Empty
                 }
             };
-            CurrentState = new CheckersState(initialBoard);
+            PieceState[,] testBoard = new PieceState[8, 8]
+            {
+                {
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty,
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty
+                },
+                {
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty,
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty
+                },
+                {
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty,
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty
+                },
+                {
+                    PieceState.Empty, PieceState.Empty, PieceState.BlackKing, PieceState.Empty, PieceState.Empty,
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty
+                },
+                {
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty,
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty
+                },
+                {
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty,
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty
+                },
+                {
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.RedKing, PieceState.Empty,
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty
+                },
+                {
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty, PieceState.Empty,
+                    PieceState.Empty, PieceState.Empty, PieceState.Empty
+                }
+            };
+            CurrentState = new CheckersState(testBoard);
             CurrentState.GenerateChildren(isMax);
             font = Content.Load<SpriteFont>("Arial");
         }
@@ -122,8 +157,9 @@ namespace MonteCarloCheckers
             }
             if(isMax)
             {
-                CurrentState = MonteCarlo<CheckersState>(CurrentState, isMax).Item2;
+                CurrentState = MonteCarlo(CurrentState, isMax, 500000).Item2;
                 isMax = !isMax;
+                CurrentState.GenerateChildren(isMax);
             }
 
             prevLeftMouseState = mouseState.LeftButton;
