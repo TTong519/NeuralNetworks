@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CommonLib
 {
-    class MonteCarloTree
+    public class MonteCarloTree
     {
 	    public static (int, T) MonteCarlo<T>(T state, bool isMax, int iterations = 1600) where T : IMonteCarloGameState<T>
 	    {

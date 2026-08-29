@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using CommonLib;
+using static CommonLib.MonteCarloTree;
 using MonoGame.Extended;
 
 namespace MonteCarloCheckers
@@ -117,6 +119,11 @@ namespace MonteCarloCheckers
                 }
 
                 toHighlight = CurrentState.MovesByPiece(square);
+            }
+            if(isMax)
+            {
+                CurrentState = MonteCarlo<CheckersState>(CurrentState, isMax).Item2;
+                isMax = !isMax;
             }
 
             prevLeftMouseState = mouseState.LeftButton;

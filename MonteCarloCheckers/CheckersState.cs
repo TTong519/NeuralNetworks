@@ -61,7 +61,7 @@ namespace MonteCarloCheckers
                 }
             }
 
-            return value;
+            return value - 1;
         }
 
         private static readonly (int rowDelta, int colDelta)[] KingMoveDirections = new (int, int)[]
