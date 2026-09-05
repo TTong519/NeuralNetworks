@@ -28,6 +28,7 @@ namespace CommonLib
 			    T bestChild = default;
 			    foreach (var child in current.Children)
 			    {
+					child.GenerateChildren(!isMax);
 				    double UCT = (child.Value / (double)child.Count) + 1.5 * (System.Math.Sqrt(System.Math.Log(current.Count) / child.Count));
 				    if (UCT > bestUCTValue)
 				    {
@@ -56,6 +57,7 @@ namespace CommonLib
 			T bestChild = default;
 			foreach (var child in state.Children)
 			{
+				child.GenerateChildren(!isMax);
                 double UCT = (child.Value / (double)child.Count) + 1.5 * (System.Math.Sqrt(System.Math.Log(state.Count) / child.Count));
                 if (isMax && UCT > bestUCTValue)
                 {
@@ -72,18 +74,25 @@ namespace CommonLib
             {
                 BackProp(bestChild, !isMax);
             }
-            
+            int temp = state.Children[0].Value;
             foreach (var child in state.Children)
 			{
-				if(child.Value == int.MaxValue && isMax)
+				if(isMax)
 				{
-					state.Value = int.MaxValue;
-                }
-				else if(child.Value == int.MinValue && !isMax)
-				{
-					state.Value = int.MinValue;
+					if(child.Value > temp)
+					{
+						temp = child.Value;
+					}
 				}
+				else
+				{
+                    if (child.Value < temp)
+                    {
+                        temp = child.Value;
+                    }
+                }
 			}
+			state.Value = temp;
         }
     }
 }

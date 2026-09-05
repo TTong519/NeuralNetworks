@@ -60,7 +60,7 @@ namespace MonteCarloCheckers
                     }
                 }
             }
-            if (value == 0) value -= 1;
+            if (value == 0) value += 1;
             return value;
         }
 
@@ -166,14 +166,14 @@ namespace MonteCarloCheckers
                     IsTerminal = true;
                     IsWin = true;
                     IsLoss = false;
-                    Value = int.MaxValue;
+                    Value = 1000;
                 }
                 else
                 {
                     IsTerminal = true;
                     IsWin = false;
                     IsLoss = true;
-                    Value = int.MinValue;
+                    Value = -1000;
                 }
             }
         }
