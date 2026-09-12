@@ -58,7 +58,11 @@ namespace CommonLib
 			foreach (var child in state.Children)
 			{
 				child.GenerateChildren(!isMax);
-                double UCT = (child.Value / (double)child.Count) + 1.5 * (System.Math.Sqrt(System.Math.Log(state.Count) / child.Count));
+                double UCT = isMax ? (child.Value / (double)child.Count) + 1.5 * (System.Math.Sqrt(System.Math.Log(state.Count) / child.Count)) : (child.Value / (double)child.Count) - 1.5 * (System.Math.Sqrt(System.Math.Log(state.Count) / child.Count));
+				if(double.IsNaN(UCT))
+				{
+					UCT = double.PositiveInfinity;
+				}
                 if (isMax && UCT > bestUCTValue)
                 {
                     bestUCTValue = UCT;
@@ -72,6 +76,7 @@ namespace CommonLib
             }
 			if(bestChild != null)
             {
+				state.Count++;
                 BackProp(bestChild, !isMax);
             }
             int temp = state.Children[0].Value;

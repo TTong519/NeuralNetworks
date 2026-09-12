@@ -124,7 +124,7 @@ namespace MonteCarloCheckers
                     PieceState.Empty, PieceState.Empty, PieceState.Empty
                 }
             };
-            CurrentState = new CheckersState(testBoard);
+            CurrentState = new CheckersState(initialBoard);
             CurrentState.GenerateChildren(isMax);
             font = Content.Load<SpriteFont>("Arial");
         }
@@ -157,7 +157,7 @@ namespace MonteCarloCheckers
             }
             if(isMax)
             {
-                CurrentState = MonteCarlo(CurrentState, isMax, 500000).Item2;
+                CurrentState = MonteCarlo(CurrentState, isMax, 10000).Item2;
                 isMax = !isMax;
                 CurrentState.GenerateChildren(isMax);
             }

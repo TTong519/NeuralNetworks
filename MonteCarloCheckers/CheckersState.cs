@@ -161,7 +161,7 @@ namespace MonteCarloCheckers
 
             if (!enemyHasPieces)
             {
-                if (isMax)
+                if (!isMax)
                 {
                     IsTerminal = true;
                     IsWin = true;
