@@ -33,6 +33,7 @@
             openFileDialog = new OpenFileDialog();
             saveFileDialog = new SaveFileDialog();
             Iterations = new NumericUpDown();
+            Start = new Button();
             ((System.ComponentModel.ISupportInitialize)Out).BeginInit();
             ((System.ComponentModel.ISupportInitialize)In).BeginInit();
             ((System.ComponentModel.ISupportInitialize)Iterations).BeginInit();
@@ -78,11 +79,23 @@
             Iterations.TabIndex = 2;
             Iterations.Value = new decimal(new int[] { 10000, 0, 0, 0 });
             // 
+            // Start
+            // 
+            Start.FlatStyle = FlatStyle.Popup;
+            Start.Location = new Point(557, 265);
+            Start.Name = "Start";
+            Start.Size = new Size(75, 23);
+            Start.TabIndex = 3;
+            Start.Text = "Start";
+            Start.UseVisualStyleBackColor = true;
+            Start.Click += Start_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1184, 561);
+            Controls.Add(Start);
             Controls.Add(Iterations);
             Controls.Add(In);
             Controls.Add(Out);
@@ -102,5 +115,6 @@
         private OpenFileDialog openFileDialog;
         private SaveFileDialog saveFileDialog;
         private NumericUpDown Iterations;
+        private Button Start;
     }
 }

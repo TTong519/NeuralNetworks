@@ -17,7 +17,7 @@ namespace GeneticArt
 
         private void Out_Click(object sender, EventArgs e)
         {
-            
+
             saveFileDialog.ShowDialog();
         }
 
@@ -33,9 +33,14 @@ namespace GeneticArt
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            inBmp = new Bitmap(600, 600);
-            outBmp = new Bitmap(600, 600);
+            inBmp = new Bitmap(Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT);
+            outBmp = new Bitmap(Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT);
             gfx = Graphics.FromImage(outBmp);
+        }
+
+        private void Start_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

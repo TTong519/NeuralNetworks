@@ -6,8 +6,8 @@ namespace GeneticArt
 {
     public static class Constants
     {
-        public const int CANVAS_WIDTH = 600;
-        public const int CANVAS_HEIGHT = 600;
+        public const int CANVAS_WIDTH = 500;
+        public const int CANVAS_HEIGHT = 500;
         public const double COLOR_MUTATION_CHANCE = 0.5;
         public const int COLOR_MUTATION_AMOUNT_MAX = 64;
         public const int COLOR_MUTATION_AMOUNT_MIN = -64;
