@@ -45,6 +45,7 @@
             Out.Location = new Point(675, 5);
             Out.Name = "Out";
             Out.Size = new Size(500, 500);
+            Out.SizeMode = PictureBoxSizeMode.StretchImage;
             Out.TabIndex = 0;
             Out.TabStop = false;
             Out.Click += Out_Click;
@@ -55,6 +56,7 @@
             In.Location = new Point(12, 5);
             In.Name = "In";
             In.Size = new Size(500, 500);
+            In.SizeMode = PictureBoxSizeMode.StretchImage;
             In.TabIndex = 1;
             In.TabStop = false;
             In.Click += In_Click;
@@ -73,7 +75,7 @@
             Iterations.BorderStyle = BorderStyle.FixedSingle;
             Iterations.Location = new Point(534, 236);
             Iterations.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
-            Iterations.Minimum = new decimal(new int[] { 1000, 0, 0, 0 });
+            Iterations.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             Iterations.Name = "Iterations";
             Iterations.Size = new Size(120, 23);
             Iterations.TabIndex = 2;
