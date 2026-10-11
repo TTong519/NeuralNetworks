@@ -25,6 +25,10 @@ namespace GeneticArt
         {
             inBmp = new Bitmap(openFileDialog.FileName);
             In.Image = inBmp;
+            foreach (TriangleArt art in Population)
+            {
+                art.Target = inBmp;
+            }
         }
 
         private void saveFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
@@ -39,8 +43,8 @@ namespace GeneticArt
             Population = new List<TriangleArt>();
             for(int i = 0; i < Constants.POPULATION_SIZE; i++)
             {
-                Population.Add(new TriangleArt(Constants.TRIANGLE_MAX));
-                Population.Last().UpdError(inBmp);
+                Population.Add(new TriangleArt(Constants.TRIANGLE_MAX, inBmp));
+                Population.Last().UpdError();
             }
         }
 
@@ -51,16 +55,17 @@ namespace GeneticArt
                 foreach (TriangleArt art in Population)
                 {
                     art.MutateArt(new Random());
-                    art.UpdError(inBmp);
+                    art.UpdError();
                 }
                 Population.Sort((a, b) => a.Error.CompareTo(b.Error));
                 for(int j = 1; j < Population.Count; j++)
                 {
                     Population[0].CopyTo(Population[j]);
                 }
-                outBmp = Population[0].Draw();
-                Out.Image = outBmp;
             }
+            outBmp = Population[0].Draw();
+            Out.Image = outBmp;
+            Error.Text = Population[0].Error.ToString();
         }
     }
 }

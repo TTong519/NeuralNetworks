@@ -34,6 +34,7 @@
             saveFileDialog = new SaveFileDialog();
             Iterations = new NumericUpDown();
             Start = new Button();
+            Error = new Label();
             ((System.ComponentModel.ISupportInitialize)Out).BeginInit();
             ((System.ComponentModel.ISupportInitialize)In).BeginInit();
             ((System.ComponentModel.ISupportInitialize)Iterations).BeginInit();
@@ -92,11 +93,22 @@
             Start.UseVisualStyleBackColor = true;
             Start.Click += Start_Click;
             // 
+            // Error
+            // 
+            Error.AutoSize = true;
+            Error.BorderStyle = BorderStyle.Fixed3D;
+            Error.Location = new Point(928, 519);
+            Error.Name = "Error";
+            Error.Size = new Size(34, 17);
+            Error.TabIndex = 4;
+            Error.Text = "Error";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1184, 561);
+            Controls.Add(Error);
             Controls.Add(Start);
             Controls.Add(Iterations);
             Controls.Add(In);
@@ -108,6 +120,7 @@
             ((System.ComponentModel.ISupportInitialize)In).EndInit();
             ((System.ComponentModel.ISupportInitialize)Iterations).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -118,5 +131,6 @@
         private SaveFileDialog saveFileDialog;
         private NumericUpDown Iterations;
         private Button Start;
+        private Label Error;
     }
 }

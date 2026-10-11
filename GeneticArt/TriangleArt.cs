@@ -9,14 +9,18 @@ namespace GeneticArt
         int MaxTriangles;
         List<Triangle> Triangles;
         public double Error;
-        public TriangleArt(int maxTriangles)
+        public Bitmap Target;
+        public TriangleArt(int maxTriangles, Bitmap bitmap)
         {
             Triangles = new List<Triangle>();
             MaxTriangles = maxTriangles;
             Error = double.NaN;
+            Target = bitmap;
         }
         public void MutateArt(Random random)
         {
+            List<Triangle> temp = new(Triangles);
+            double LastError = Error;
             double mutationType = random.NextDouble();
             if(mutationType <= Constants.ADD_TRIANGLE_CHANCE && Triangles.Count < MaxTriangles)
             {
@@ -27,10 +31,16 @@ namespace GeneticArt
                 int indexToRemove = random.Next(0, Triangles.Count);
                 Triangles.RemoveAt(indexToRemove);
             }
-            else if (mutationType <= Constants.ADD_TRIANGLE_CHANCE + Constants.REMOVE_TRIANGLE_CHANCE + Constants.MUTATE_TRIANGLE_CHANCE && Triangles.Count > 0)
+            else if(Triangles.Count > 0)
             {
                 int indexToMutate = random.Next(0, Triangles.Count);
                 Triangles[indexToMutate].Mutate(random);
+            }
+            UpdError();
+            if(Error >= LastError)
+            {
+                Error = LastError;
+                Triangles = temp;
             }
         }
         public Bitmap Draw()
@@ -43,7 +53,7 @@ namespace GeneticArt
             }
             return bmp;
         }
-        public void UpdError(Bitmap Target)
+        public void UpdError()
         {
             Bitmap Output = Draw();
             int sum = 0;
@@ -60,7 +70,7 @@ namespace GeneticArt
         }
         public void CopyTo(TriangleArt other)
         {
-            other = new(MaxTriangles);
+            other = new(MaxTriangles, Target);
             foreach (Triangle triangle in Triangles)
             {
                 other.Triangles.Add(triangle);
